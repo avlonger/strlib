@@ -1,15 +1,31 @@
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include <stdbool.h>
-#include <unistd.h>
 
 /**
 * This is an implementation of Duval algorithm
 * TODO: more comments and docs
 */
 int duval(const char * text, int * output){
-    return 0;
+    size_t n = strlen(text);
+    int h = 0;
+    int words_count = 0;
+    while (h < n) {
+        int i = h;
+        int j = h + 1;
+        while (text[j] >= text[i]) {
+            if (text[j] > text[i])
+                i = h;
+            else
+                i++;
+            j++;
+        }
+        while (h <= i) {
+            output[words_count++] = h;
+            h += j - i;
+        }
+    }
+    return words_count;
 }
 
 /**
@@ -17,7 +33,7 @@ int duval(const char * text, int * output){
 * TODO: more comments and docs
 */
 int naive_lyndon_decomposition(const char * text, int * output) {
-    unsigned int n = strlen(text);
+    size_t n = strlen(text);
 
     if (n == 1) {
         output[0] = 0;
@@ -47,7 +63,7 @@ int naive_lyndon_decomposition(const char * text, int * output) {
                 next_word[first_word_start] = third_word_start;
             }
             first_word_start = next_word[first_word_start];
-            second_word_start = (first_word_start < n) ? next_word[first_word_start] : n;
+            second_word_start = (first_word_start < n) ? next_word[first_word_start] : (int)n;
         }
     }
     int word_count = 0;
@@ -56,26 +72,7 @@ int naive_lyndon_decomposition(const char * text, int * output) {
         output[word_count++] = word_start;
         word_start = next_word[word_start];
     }
+
+    free(next_word);
     return word_count;
-}
-
-int main(int argc, char** argv) {
-    if (argc < 2) {
-        printf("Usage: %s TEXT\n", argv[0]);
-        return 1;
-    }
-    char * text = argv[1];
-
-    int * output = calloc(strlen(text), sizeof(int));
-
-    int word_count = naive_lyndon_decomposition(text, output);
-
-    printf("WORD COUNT: %d\n", word_count);
-
-    for (int i = 0; i < word_count; ++i) {
-        printf("%d ", output[i]);
-    }
-    printf("\n");
-
-    return 0;
 }

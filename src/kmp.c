@@ -9,7 +9,7 @@
 */
 int kmp(const char * pattern, const char * text, int * output){
     // build border array
-    unsigned int m = strlen(pattern);
+    size_t m = strlen(pattern);
     int border[m];
     int i, j, k;
     i = 0;
@@ -26,7 +26,7 @@ int kmp(const char * pattern, const char * text, int * output){
     }
 
     // now we do pattern matching
-    unsigned int n = strlen(text);
+    size_t n = strlen(text);
     i = j = k = 0;
     while (j < n) {
         while (i > -1 && pattern[i] != text[j])
@@ -39,26 +39,4 @@ int kmp(const char * pattern, const char * text, int * output){
         }
     }
     return k;
-}
-
-int main(int argc, char** argv) {
-    if (argc < 3) {
-        printf("Usage: %s PATTERN TEXT\n", argv[0]);
-        return 1;
-    }
-    char * pattern = argv[1];
-    char * text = argv[2];
-
-    int * output = calloc(strlen(text), sizeof(int));
-
-    int occ = kmp(pattern, text, output);
-
-    printf("OCCURENCES: %d\n", occ);
-
-    for (int i = 0; i < occ; ++i) {
-        printf("%d ", output[i]);
-    }
-    printf("\n");
-
-    return 0;
 }

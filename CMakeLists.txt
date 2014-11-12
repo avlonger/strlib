@@ -5,3 +5,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 add_executable(kmp src/kmp.c)
 add_executable(duval src/duval.c)
+add_executable(exp src/duval.c src/exp.c)
