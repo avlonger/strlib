@@ -48,7 +48,32 @@ void save_random_strings_results() {
     free(buffer);
 }
 
-int main(int argc, char** argv) {
+void save_ecoli_results() {
+    freopen("/Users/alonger/HSE/stringology/strlib/ecoli.txt", "wt", stdout);
+    freopen("/Users/alonger/HSE/stringology/strlib/ecoli.fasta", "rt", stdin);
+    int * buffer = calloc(LENGTH + 1, sizeof(int));
+    char * text = calloc(2 * LENGTH + 1, sizeof(char));
+    char * text_part = calloc(LENGTH + 1, sizeof(char));
+    char * read_buffer = calloc(LENGTH + 1, sizeof(char));
+    for (int exp = 0; exp < EXPERIMENTS; ++exp) {
+        int text_len = 0;
+        memset(text, 0, (2 * LENGTH + 1) * sizeof(char));
+        memset(text_part, 0, (LENGTH + 1) * sizeof(char));
+        while (text_len < LENGTH) {
+            scanf("%s\n", read_buffer);
+            strcat(text, read_buffer);
+            text_len += strlen(read_buffer);
+        }
+        text_part[0] = text[0];
+        for (int i = 1; i < LENGTH; ++i) {
+            text_part[i] = text[i];
+            printf("%d %d\n", i + 1, duval(text_part, buffer));
+        }
+    }
+    free(buffer);
+}
 
+int main(int argc, char** argv) {
+    save_ecoli_results();
     return 0;
 }
