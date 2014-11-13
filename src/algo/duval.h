@@ -1,4 +1,3 @@
-
 /**
 * This is an implementation of Duval algorithm
 * TODO: more comments and docs

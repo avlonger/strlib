@@ -64,6 +64,8 @@ if __name__ == '__main__':
                 process = subprocess.Popen(['../../bin/duval', text], stdout=subprocess.PIPE)
                 output = process.stdout.read().strip()
                 words_count = int(output.splitlines()[0].split()[-1].strip())
+                factor_positions = map(int, output.splitlines()[1].split())
+                assert is_lyndon_decomposition(text, factor_positions)
                 values.append(words_count)
             average_values.append(sum(values) * 1.0 / len(values))
         pl.plot(alphabet_sizes, average_values)
