@@ -1,10 +1,13 @@
 # strlib
 
-Some algorithms for words decomposition.
+Some algorithms for words decomposition
+
+# Compilation
+
+`$ make`
 
 # Usage
 
 ```
-$ make
-$ ./bin/duval mississippi
+$ ./bin/duval -h mississippi
 ```
