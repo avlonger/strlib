@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
 
     int word_count = duval(text, output);
 
-    printf("WORD COUNT: %d\n", word_count);
+    printf("FACTOR COUNT: %d\n", word_count);
     printf("FACTOR POSITIONS:\n");
 
     for (int i = 0; i < word_count; ++i) {
