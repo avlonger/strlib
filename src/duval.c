@@ -6,8 +6,9 @@
 #include "algo/duval.h"
 
 void usage(const char * program_name) {
-    printf("Usage: %s [-h] [-f FILENAME | TEXT]\n\n", program_name);
+    printf("Usage: %s [-h] [-f FILENAME | TEXT]\n", program_name);
     printf("Build Lyndon decomposition for text\n");
+    printf("The output contains starting positions of decomposition factors\n\n");
     printf(" -h  Print decomposition in readable format\n");
     printf(" -f  Filename (not supported yet)\n");
 }
@@ -45,6 +46,7 @@ int main(int argc, char** argv) {
     int word_count = duval(text, output);
 
     printf("WORD COUNT: %d\n", word_count);
+    printf("FACTOR POSITIONS:\n");
 
     for (int i = 0; i < word_count; ++i) {
         printf("%d ", output[i]);
