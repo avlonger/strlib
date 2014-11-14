@@ -4,7 +4,9 @@ Some algorithms for words decomposition
 
 # Compilation
 
-`$ make`
+```
+$ make
+```
 
 # Usage
 
