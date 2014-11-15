@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # nice figures only
     counts = defaultdict(lambda: defaultdict(float))
     print 'Reading...'
-    with open('../../result_lengths.txt') as fd:
+    with open('../../result_alphabets.txt') as fd:
         reader = csv.reader(fd, delimiter=' ')
         try:
             while True:
@@ -21,6 +21,7 @@ if __name__ == '__main__':
         except StopIteration:
             pass
 
+        pl.plot(np.arange(1000), np.log2(np.arange(1000)), label='$log_2 n$')
         for alphabet_size in [2, 3, 5, 10, 100]:
             lengths = sorted(counts[alphabet_size])
             pl.plot(lengths, map(counts[alphabet_size].get, lengths), label='$\sigma = {}$'.format(alphabet_size))
@@ -30,6 +31,7 @@ if __name__ == '__main__':
         pl.savefig('../../results/alphabets.png')
         pl.clf()
 
+        pl.plot(np.arange(1000), np.log2(np.arange(1000)), label='$log_2 n$')
         step = 10
         lengths = range(2, 50) + range(50, 1001, step)
         for alphabet_size in [2, 3, 5, 10, 100]:
