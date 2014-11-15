@@ -4,6 +4,7 @@ from collections import defaultdict
 
 import pylab as pl
 import numpy as np
+from scipy.interpolate import spline
 
 if __name__ == '__main__':
     counts = defaultdict(lambda: defaultdict(float))
@@ -15,18 +16,32 @@ if __name__ == '__main__':
                 alphabet_size, length = map(int, reader.next())
                 all_counts = map(int, reader.next()[:-1])
                 counts[alphabet_size][length] = np.average(all_counts)
-                # counts[alphabet_size][length - length % 10].extend(all_counts)
         except StopIteration:
             pass
 
         for alphabet_size in [2, 3, 5, 10, 100]:
-            print 'Plotting for alphabet size {}...'.format(alphabet_size)
             lengths = sorted(counts[alphabet_size])
             pl.plot(lengths, map(counts[alphabet_size].get, lengths), label='$\sigma = {}$'.format(alphabet_size))
         pl.legend(loc=4)
         pl.xlabel('Text length')
         pl.ylabel('Factors count')
         pl.savefig('../../results/alphabets.png')
+        pl.clf()
+
+        step = 10
+        lengths = range(2, 50) + range(50, 1001, step)
+        for alphabet_size in [2, 3, 5, 10, 100]:
+            print 'Alphabet size:', alphabet_size
+            values = []
+            for i, length in enumerate(lengths[:-1]):
+                values.append(np.average(
+                    map(counts[alphabet_size].get, xrange(length, lengths[i + 1]))
+                ))
+            pl.plot(range(2, 50) + range(55, 1001, step), values, label='$\sigma = {}$'.format(alphabet_size))
+        pl.legend(loc=4)
+        pl.xlabel('Text length')
+        pl.ylabel('Factors count')
+        pl.savefig('../../results/alphabets-smooth.png')
         pl.clf()
 
         for length in [10, 100, 500, 999]:
