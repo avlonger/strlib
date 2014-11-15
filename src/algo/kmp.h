@@ -5,6 +5,6 @@
 int kmp(const char * pattern, const char * text, int * output);
 
 /**
-* TODO: more comments and docs
+* Build border array for text
 */
-int longest_borderless_subword(const char * text, char * output);
+void border(const char * text, int * border);

@@ -4,7 +4,7 @@ LDFLAGS=
 BIN_PATH=bin
 SRC_PATH=src
 
-all: dirs duval kmp exp
+all: dirs duval kmp exp borderless
 
 dirs:
 	mkdir -p $(BIN_PATH)
@@ -18,6 +18,8 @@ kmp:
 exp:
 	$(CC) $(CFLAGS) $(SRC_PATH)/algo/*.c $(SRC_PATH)/exp.c -o $(BIN_PATH)/exp
 
+borderless:
+	$(CC) $(CFLAGS) $(SRC_PATH)/borderless.c $(SRC_PATH)/algo/borderless.c $(SRC_PATH)/algo/kmp.c -o $(BIN_PATH)/borderless
 
 clean:
 	rm -rf $(BIN_PATH)

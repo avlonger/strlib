@@ -1,42 +1,36 @@
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
-#include <unistd.h>
 
-/**
-* This is an implementation of the Knuth Morris Pratt algorithm
-* TODO: more comments and docs
-*/
-int kmp(const char * pattern, const char * text, int * output){
-    // build border array
-    size_t m = strlen(pattern);
-    int border[m];
-    int i, j, k;
-    i = 0;
-    j = border[0] = -1;
-    while (i < m) {
-        while (j > -1 && pattern[i] != pattern[j])
-            j = border[j];
-        i++;
-        j++;
-        if (i<m && pattern[i] == pattern[j])
-            border[i] = border[j];
-        else
-            border[i] = j;
-    }
-
-    // now we do pattern matching
+void border(const char * text, int * border) {
     size_t n = strlen(text);
-    i = j = k = 0;
+    border[0] = 0;
+    int j = 0;
+    for (int i = 1; i < n; ++i) {
+        j = border[i - 1];
+        while (j > 0 && text[i] != text[j]) {
+            j = border[j - 1];
+        }
+        if (text[i] == text[j])
+            j++;
+        border[i] = j;
+    }
+}
+
+int kmp(const char * pattern, const char * text, int * output){
+    size_t m = strlen(pattern), n = strlen(text);
+    int * pattern_border = calloc(m, sizeof(int));
+    border(pattern, pattern_border);
+    int i = 0, j = 0, k = 0;
     while (j < n) {
-        while (i > -1 && pattern[i] != text[j])
-            i = border[i];
+        while (i > 0 && pattern[i] != text[j])
+            i = pattern_border[i - 1];
         i++;
         j++;
         if (i >= m) {
             output[k++] = j - i;
-            i = border[i];
+            i = pattern_border[i];
         }
     }
+    free(pattern_border);
     return k;
 }
