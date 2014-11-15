@@ -4,12 +4,14 @@ from collections import defaultdict
 
 import pylab as pl
 import numpy as np
-from scipy.interpolate import spline
 
 if __name__ == '__main__':
+    # you can see a lot of hard-coded numbers here
+    # because this script is used for creating
+    # nice figures only
     counts = defaultdict(lambda: defaultdict(float))
     print 'Reading...'
-    with open('../../result.txt') as fd:
+    with open('../../result_lengths.txt') as fd:
         reader = csv.reader(fd, delimiter=' ')
         try:
             while True:
@@ -31,7 +33,6 @@ if __name__ == '__main__':
         step = 10
         lengths = range(2, 50) + range(50, 1001, step)
         for alphabet_size in [2, 3, 5, 10, 100]:
-            print 'Alphabet size:', alphabet_size
             values = []
             for i, length in enumerate(lengths[:-1]):
                 values.append(np.average(
@@ -44,14 +45,37 @@ if __name__ == '__main__':
         pl.savefig('../../results/alphabets-smooth.png')
         pl.clf()
 
-        for length in [10, 100, 500, 999]:
-            print 'Plotting for word length {}...'.format(length)
+        for length in [10, 100] + range(200, 1001, 200):
+            sizes = sorted(counts)
+            pl.plot(sizes, map(lambda x: counts[x][length], sizes), label='$n = {}$'.format(length))
+        pl.legend(loc=4)
+        pl.xlabel('Alphabet size')
+        pl.ylabel('Factors count')
+        pl.savefig('../../results/lengths.png')
+        pl.clf()
+
+        for length in [10, 100, 500, 1000]:
             sizes = sorted(counts)
             pl.plot(sizes, map(lambda x: counts[x][length], sizes))
             pl.title('Text length = {}'.format(length))
             pl.xlabel('Alphabet size')
             pl.ylabel('Factors count')
             pl.savefig('../../results/length-{}.png'.format(length))
+            pl.clf()
+
+        for length in [10, 100, 500, 1000]:
+            step = 10
+            sizes = range(2, 10) + range(10, 101, step)
+            values = []
+            for i, size in enumerate(sizes[:-1]):
+                values.append(np.average(
+                    map(lambda x: counts[x][length], xrange(size, sizes[i + 1]))
+                ))
+            pl.plot(range(2, 10) + range(15, 101, 10), values)
+            pl.title('Text length = {}'.format(length))
+            pl.xlabel('Alphabet size')
+            pl.ylabel('Factors count')
+            pl.savefig('../../results/smooth-length-{}.png'.format(length))
             pl.clf()
 
     genom_counts = defaultdict(list)

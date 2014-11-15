@@ -5,7 +5,8 @@
 #include "algo/duval.h"
 
 #define LENGTH 1000
-#define EXPERIMENTS 10000
+#define EXPERIMENTS 100000
+#define ALPHABET_SIZE 127
 
 char *rand_string(char *str, int n, int alphabet_size) {
     for (int i = 0; i < n; ++i) {
@@ -31,8 +32,8 @@ void test_duval_and_naive_results_equality() {
     free(text);
 }
 
-void save_random_strings_results() {
-    freopen("/Users/alonger/HSE/stringology/strlib/result.txt", "wt", stdout);
+void save_random_strings_results_for_alphabets() {
+    freopen("/Users/alonger/HSE/stringology/strlib/result_alphabets.txt", "wt", stdout);
     int * buffer = calloc(LENGTH + 1, sizeof(int));
     char * text = calloc(LENGTH + 1, sizeof(char));
 
@@ -40,6 +41,26 @@ void save_random_strings_results() {
     for (int i = 0; i < 13; ++i) {
         int alphabet_size = alphabet_sizes[i];
         for (int length = 2; length < LENGTH; ++length) {
+            printf("%d %d\n", alphabet_size, length);
+            for (int exp = 0; exp < EXPERIMENTS; ++exp) {
+                printf("%d ", duval(rand_string(text, length, alphabet_size), buffer));
+            }
+            printf("\n");
+        }
+    }
+    free(buffer);
+}
+
+
+void save_random_strings_results_for_lengths() {
+    freopen("/Users/alonger/HSE/stringology/strlib/result_lengths.txt", "wt", stdout);
+    int * buffer = calloc(LENGTH + 1, sizeof(int));
+    char * text = calloc(LENGTH + 1, sizeof(char));
+    int lengths[11] = {10,100,200,300,400,500,600,700,800,900,1000};
+
+    for (int alphabet_size = 2; alphabet_size < ALPHABET_SIZE; ++alphabet_size) {
+        for (int i = 0; i < 11; ++i) {
+            int length = lengths[i];
             printf("%d %d\n", alphabet_size, length);
             for (int exp = 0; exp < EXPERIMENTS; ++exp) {
                 printf("%d ", duval(rand_string(text, length, alphabet_size), buffer));
@@ -76,6 +97,6 @@ void save_ecoli_results() {
 }
 
 int main(int argc, char** argv) {
-    save_random_strings_results();
+    save_random_strings_results_for_lengths();
     return 0;
 }
