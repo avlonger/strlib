@@ -2,11 +2,10 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
-#include "duval.h"
+#include "algo/duval.h"
 
 #define LENGTH 1000
-#define EXPERIMENTS 100
-#define ALPHABET_SIZE 127
+#define EXPERIMENTS 10000
 
 char *rand_string(char *str, int n, int alphabet_size) {
     for (int i = 0; i < n; ++i) {
@@ -36,7 +35,10 @@ void save_random_strings_results() {
     freopen("/Users/alonger/HSE/stringology/strlib/result.txt", "wt", stdout);
     int * buffer = calloc(LENGTH + 1, sizeof(int));
     char * text = calloc(LENGTH + 1, sizeof(char));
-    for (int alphabet_size = 2; alphabet_size <= ALPHABET_SIZE; ++alphabet_size) {
+
+    int alphabet_sizes[13] = {2,3,5,10,20,30,40,50,60,70,80,90,100};
+    for (int i = 0; i < 13; ++i) {
+        int alphabet_size = alphabet_sizes[i];
         for (int length = 2; length < LENGTH; ++length) {
             printf("%d %d\n", alphabet_size, length);
             for (int exp = 0; exp < EXPERIMENTS; ++exp) {
@@ -74,6 +76,6 @@ void save_ecoli_results() {
 }
 
 int main(int argc, char** argv) {
-    save_ecoli_results();
+    save_random_strings_results();
     return 0;
 }

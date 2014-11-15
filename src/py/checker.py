@@ -6,9 +6,9 @@ import subprocess
 from random import choice
 
 import pylab as pl
+import numpy as np
 
-
-EXPERIMENTS = 1000
+EXPERIMENTS = 10000
 LENGTH = 1000
 AVAILABLE_LETTERS = string.lowercase + string.uppercase + string.digits
 
@@ -44,33 +44,58 @@ def is_lyndon_decomposition(word, factor_positions):
     return True
 
 if __name__ == '__main__':
-    print 'Testing duval algorithm in series of {} experiments...'.format(EXPERIMENTS)
-    for _ in xrange(EXPERIMENTS):
-        text = random_string(LENGTH, len(AVAILABLE_LETTERS))
-        process = subprocess.Popen(['../../bin/duval', text], stdout=subprocess.PIPE)
-        output = process.stdout.read().strip()
-        factor_positions = map(int, output.splitlines()[1].split())
-        assert is_lyndon_decomposition(text, factor_positions)
-    print 'OK'
-
-    alphabet_sizes = range(2, len(AVAILABLE_LETTERS) + 1)
-    for length in [10, 100, 500, 999]:
+    for alphabet_size in xrange(50, 51):
         average_values = []
-        print 'Plotting for length: {}'.format(length)
-        for alphabet_size in alphabet_sizes:
+        print 'Plotting for alphabet size: {}'.format(alphabet_size)
+        for length in xrange(1, LENGTH + 1):
+            print 'Length:', length
             values = []
-            for _ in xrange(EXPERIMENTS / 10):
+            for _ in xrange(EXPERIMENTS):
+                print 'Exp:', _
                 text = random_string(length, alphabet_size)
                 process = subprocess.Popen(['../../bin/duval', text], stdout=subprocess.PIPE)
                 output = process.stdout.read().strip()
                 words_count = int(output.splitlines()[0].split()[-1].strip())
-                factor_positions = map(int, output.splitlines()[1].split())
-                assert is_lyndon_decomposition(text, factor_positions)
                 values.append(words_count)
-            average_values.append(sum(values) * 1.0 / len(values))
-        pl.plot(alphabet_sizes, average_values)
-        pl.title('Text length = {}'.format(length))
-        pl.xlabel('Alphabet size')
+            average_values.append(np.average(values))
+        pl.plot(xrange(LENGTH), average_values)
+        pl.title('Alphabet size = {}'.format(alphabet_size))
+        pl.xlabel('Text length')
         pl.ylabel('Factors count')
-        pl.savefig('../../results/py-length-{}.png'.format(length))
+        pl.savefig('../../results/py-alphabet-{}.png'.format(alphabet_size))
         pl.clf()
+
+
+    # print 'Testing duval algorithm in series of {} experiments...'.format(EXPERIMENTS)
+    # for _ in xrange(EXPERIMENTS):
+    #     text = random_string(LENGTH, len(AVAILABLE_LETTERS))
+    #     process = subprocess.Popen(['../../bin/duval', text], stdout=subprocess.PIPE)
+    #     output = process.stdout.read().strip()
+    #     factor_positions = map(int, output.splitlines()[1].split())
+    #     assert is_lyndon_decomposition(text, factor_positions)
+    # print 'OK'
+
+    # alphabet_sizes = range(2, len(AVAILABLE_LETTERS) + 1)
+    # for length in [10, 100, 500, 999]:
+    #     average_values = []
+    #     print 'Plotting for length: {}'.format(length)
+    #     for alphabet_size in alphabet_sizes:
+    #         values = []
+    #         for _ in xrange(EXPERIMENTS / 10):
+    #             text = random_string(length, alphabet_size)
+    #             process = subprocess.Popen(['../../bin/duval', text], stdout=subprocess.PIPE)
+    #             output = process.stdout.read().strip()
+    #             words_count = int(output.splitlines()[0].split()[-1].strip())
+    #             factor_positions = map(int, output.splitlines()[2].split())
+    #             assert is_lyndon_decomposition(text, factor_positions)
+    #             values.append(words_count)
+    #         average_values.append(sum(values) * 1.0 / len(values))
+    #     pl.plot(alphabet_sizes, average_values)
+    #     pl.title('Text length = {}'.format(length))
+    #     pl.xlabel('Alphabet size')
+    #     pl.ylabel('Factors count')
+    #     pl.savefig('../../results/py-length-{}.png'.format(length))
+    #     pl.clf()
+
+        # alphabet_sizes = range(2, len(AVAILABLE_LETTERS) + 1)
+

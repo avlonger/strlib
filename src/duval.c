@@ -18,18 +18,23 @@ int main(int argc, char** argv) {
     int c;
     char * filename = NULL;
     bool human_friendly = false;
+    bool fasta = false;
     opterr = 1;
-    while ((c = getopt (argc, argv, "hf:")) != -1)
+    while ((c = getopt (argc, argv, "dhf:")) != -1)
         switch (c)
         {
             case 'f':
-                filename = (char *) optarg[0];
+                filename = argv[optind];
                 break;
             case 'h':
                 human_friendly = true;
                 break;
+            case 'd':
+                fasta = true;
+                break;
             case '?':
             case ':':
+                return -1;
             default:
                 usage(argv[0]);
                 return -1;
