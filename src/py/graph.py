@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # nice figures only
     counts = defaultdict(lambda: defaultdict(float))
     print 'Reading...'
-    with open('../../result_alphabets.txt') as fd:
+    with open('../../result_alphabets_borderless.txt') as fd:
         reader = csv.reader(fd, delimiter=' ')
         try:
             while True:
@@ -21,17 +21,15 @@ if __name__ == '__main__':
         except StopIteration:
             pass
 
-        pl.plot(np.arange(1000), np.log2(np.arange(1000)), label='$log_2 n$')
         for alphabet_size in [2, 3, 5, 10, 100]:
             lengths = sorted(counts[alphabet_size])
             pl.plot(lengths, map(counts[alphabet_size].get, lengths), label='$\sigma = {}$'.format(alphabet_size))
         pl.legend(loc=4)
         pl.xlabel('Text length')
         pl.ylabel('Factors count')
-        pl.savefig('../../results/alphabets.png')
+        pl.savefig('../../results/alphabets_borderless.png')
         pl.clf()
 
-        pl.plot(np.arange(1000), np.log2(np.arange(1000)), label='$log_2 n$')
         step = 10
         lengths = range(2, 50) + range(50, 1001, step)
         for alphabet_size in [2, 3, 5, 10, 100]:
@@ -44,7 +42,7 @@ if __name__ == '__main__':
         pl.legend(loc=4)
         pl.xlabel('Text length')
         pl.ylabel('Factors count')
-        pl.savefig('../../results/alphabets-smooth.png')
+        pl.savefig('../../results/alphabets-borderless-smooth.png')
         pl.clf()
 
         for length in [10, 100] + range(200, 1001, 200):
@@ -53,7 +51,7 @@ if __name__ == '__main__':
         pl.legend(loc=4)
         pl.xlabel('Alphabet size')
         pl.ylabel('Factors count')
-        pl.savefig('../../results/lengths.png')
+        pl.savefig('../../results/lengths_borderless.png')
         pl.clf()
 
         for length in [10, 100, 500, 1000]:
@@ -62,7 +60,7 @@ if __name__ == '__main__':
             pl.title('Text length = {}'.format(length))
             pl.xlabel('Alphabet size')
             pl.ylabel('Factors count')
-            pl.savefig('../../results/length-{}.png'.format(length))
+            pl.savefig('../../results/length-borderless-{}.png'.format(length))
             pl.clf()
 
         for length in [10, 100, 500, 1000]:
@@ -77,37 +75,37 @@ if __name__ == '__main__':
             pl.title('Text length = {}'.format(length))
             pl.xlabel('Alphabet size')
             pl.ylabel('Factors count')
-            pl.savefig('../../results/smooth-length-{}.png'.format(length))
+            pl.savefig('../../results/smooth-length-borderless-{}.png'.format(length))
             pl.clf()
 
-    genom_counts = defaultdict(list)
-    with open(sys.argv[2]) as fd:
-        reader = csv.reader(fd, delimiter=' ')
-        for line in reader:
-            length, count = map(int, line)
-            genom_counts[length].append(count)
-
-        for length, counts_list in genom_counts.iteritems():
-            genom_counts[length] = sum(counts_list) * 1.0 / len(counts_list)
-
-        genom_lengths = sorted(genom_counts)
-
-        pl.plot(genom_lengths, map(genom_counts.get, genom_lengths))
-        pl.title('E.coli')
-        pl.xlabel('Text length')
-        pl.ylabel('Factors count')
-        pl.savefig('../../results/ecoli.png')
-        pl.clf()
-
-        # plot factors count for alphabet size == 4
-        # to compare it to E.coli
-        lengths = sorted(counts[4])
-        pl.plot(lengths, map(counts[4].get, lengths), 'b', label='Random words')
-        pl.plot(genom_lengths, map(genom_counts.get, genom_lengths), 'r', label='E.coli')
-        pl.title('E.coli and random words comparison')
-        pl.xlabel('Text length')
-        pl.ylabel('Factors count')
-        pl.savefig('../../results/ecoli-compare.png')
+    # genom_counts = defaultdict(list)
+    # with open(sys.argv[2]) as fd:
+    #     reader = csv.reader(fd, delimiter=' ')
+    #     for line in reader:
+    #         length, count = map(int, line)
+    #         genom_counts[length].append(count)
+    #
+    #     for length, counts_list in genom_counts.iteritems():
+    #         genom_counts[length] = sum(counts_list) * 1.0 / len(counts_list)
+    #
+    #     genom_lengths = sorted(genom_counts)
+    #
+    #     pl.plot(genom_lengths, map(genom_counts.get, genom_lengths))
+    #     pl.title('E.coli')
+    #     pl.xlabel('Text length')
+    #     pl.ylabel('Factors count')
+    #     pl.savefig('../../results/ecoli.png')
+    #     pl.clf()
+    #
+    #     # plot factors count for alphabet size == 4
+    #     # to compare it to E.coli
+    #     lengths = sorted(counts[4])
+    #     pl.plot(lengths, map(counts[4].get, lengths), 'b', label='Random words')
+    #     pl.plot(genom_lengths, map(genom_counts.get, genom_lengths), 'r', label='E.coli')
+    #     pl.title('E.coli and random words comparison')
+    #     pl.xlabel('Text length')
+    #     pl.ylabel('Factors count')
+    #     pl.savefig('../../results/ecoli-compare.png')
 
 
 
