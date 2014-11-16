@@ -1,9 +1,14 @@
 import csv
 import sys
 from collections import defaultdict
+from scipy.optimize import curve_fit
 
 import pylab as pl
 import numpy as np
+
+
+def func(n, c):
+    return c * n / np.log2(n)
 
 if __name__ == '__main__':
     # you can see a lot of hard-coded numbers here
@@ -21,62 +26,67 @@ if __name__ == '__main__':
         except StopIteration:
             pass
 
-        for alphabet_size in [2, 3, 5, 10, 100]:
+        for alphabet_size in [10]:
             lengths = sorted(counts[alphabet_size])
-            pl.plot(lengths, map(counts[alphabet_size].get, lengths), label='$\sigma = {}$'.format(alphabet_size))
+            values = map(counts[alphabet_size].get, lengths)
+            np_lengths = np.array(lengths, dtype=float)
+            coeff, cov = curve_fit(func,  np_lengths, np.array(values, dtype=float))
+            pl.plot(lengths, values, label='$\sigma = {}$'.format(alphabet_size))
+            pl.plot(lengths, coeff[0] * np_lengths / np.log2(np_lengths), label='fitted $\sigma = {}$'.format(alphabet_size))
         pl.legend(loc=4)
+        pl.grid()
         pl.xlabel('Text length')
         pl.ylabel('Factors count')
-        pl.savefig('../../results/alphabets_borderless.png')
+        pl.savefig('../../results/alphabets_borderless_fit.png')
         pl.clf()
 
-        step = 10
-        lengths = range(2, 50) + range(50, 1001, step)
-        for alphabet_size in [2, 3, 5, 10, 100]:
-            values = []
-            for i, length in enumerate(lengths[:-1]):
-                values.append(np.average(
-                    map(counts[alphabet_size].get, xrange(length, lengths[i + 1]))
-                ))
-            pl.plot(range(2, 50) + range(55, 1001, step), values, label='$\sigma = {}$'.format(alphabet_size))
-        pl.legend(loc=4)
-        pl.xlabel('Text length')
-        pl.ylabel('Factors count')
-        pl.savefig('../../results/alphabets-borderless-smooth.png')
-        pl.clf()
-
-        for length in [10, 100] + range(200, 1001, 200):
-            sizes = sorted(counts)
-            pl.plot(sizes, map(lambda x: counts[x][length], sizes), label='$n = {}$'.format(length))
-        pl.legend(loc=4)
-        pl.xlabel('Alphabet size')
-        pl.ylabel('Factors count')
-        pl.savefig('../../results/lengths_borderless.png')
-        pl.clf()
-
-        for length in [10, 100, 500, 1000]:
-            sizes = sorted(counts)
-            pl.plot(sizes, map(lambda x: counts[x][length], sizes))
-            pl.title('Text length = {}'.format(length))
-            pl.xlabel('Alphabet size')
-            pl.ylabel('Factors count')
-            pl.savefig('../../results/length-borderless-{}.png'.format(length))
-            pl.clf()
-
-        for length in [10, 100, 500, 1000]:
-            step = 10
-            sizes = range(2, 10) + range(10, 101, step)
-            values = []
-            for i, size in enumerate(sizes[:-1]):
-                values.append(np.average(
-                    map(lambda x: counts[x][length], xrange(size, sizes[i + 1]))
-                ))
-            pl.plot(range(2, 10) + range(15, 101, 10), values)
-            pl.title('Text length = {}'.format(length))
-            pl.xlabel('Alphabet size')
-            pl.ylabel('Factors count')
-            pl.savefig('../../results/smooth-length-borderless-{}.png'.format(length))
-            pl.clf()
+        # step = 10
+        # lengths = range(2, 50) + range(50, 1001, step)
+        # for alphabet_size in [2, 3, 5, 10, 100]:
+        #     values = []
+        #     for i, length in enumerate(lengths[:-1]):
+        #         values.append(np.average(
+        #             map(counts[alphabet_size].get, xrange(length, lengths[i + 1]))
+        #         ))
+        #     pl.plot(range(2, 50) + range(55, 1001, step), values, label='$\sigma = {}$'.format(alphabet_size))
+        # pl.legend(loc=4)
+        # pl.xlabel('Text length')
+        # pl.ylabel('Factors count')
+        # pl.savefig('../../results/alphabets-borderless-smooth.png')
+        # pl.clf()
+        #
+        # for length in [10, 100] + range(200, 1001, 200):
+        #     sizes = sorted(counts)
+        #     pl.plot(sizes, map(lambda x: counts[x][length], sizes), label='$n = {}$'.format(length))
+        # pl.legend(loc=4)
+        # pl.xlabel('Alphabet size')
+        # pl.ylabel('Factors count')
+        # pl.savefig('../../results/lengths_borderless.png')
+        # pl.clf()
+        #
+        # for length in [10, 100, 500, 1000]:
+        #     sizes = sorted(counts)
+        #     pl.plot(sizes, map(lambda x: counts[x][length], sizes))
+        #     pl.title('Text length = {}'.format(length))
+        #     pl.xlabel('Alphabet size')
+        #     pl.ylabel('Factors count')
+        #     pl.savefig('../../results/length-borderless-{}.png'.format(length))
+        #     pl.clf()
+        #
+        # for length in [10, 100, 500, 1000]:
+        #     step = 10
+        #     sizes = range(2, 10) + range(10, 101, step)
+        #     values = []
+        #     for i, size in enumerate(sizes[:-1]):
+        #         values.append(np.average(
+        #             map(lambda x: counts[x][length], xrange(size, sizes[i + 1]))
+        #         ))
+        #     pl.plot(range(2, 10) + range(15, 101, 10), values)
+        #     pl.title('Text length = {}'.format(length))
+        #     pl.xlabel('Alphabet size')
+        #     pl.ylabel('Factors count')
+        #     pl.savefig('../../results/smooth-length-borderless-{}.png'.format(length))
+        #     pl.clf()
 
     # genom_counts = defaultdict(list)
     # with open(sys.argv[2]) as fd:
