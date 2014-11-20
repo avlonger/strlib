@@ -5,8 +5,8 @@
 #include "algo/duval.h"
 #include "algo/borderless.h"
 
-#define LENGTH 1000
-#define EXPERIMENTS 100
+#define LENGTH 350
+#define EXPERIMENTS 10000
 #define ALPHABET_SIZE 127
 
 char *rand_string(char *str, int n, int alphabet_size) {
@@ -77,7 +77,7 @@ void save_random_strings_results_for_alphabets_borderless() {
     char * text = calloc(LENGTH + 1, sizeof(char));
     int start;
 
-    int alphabet_sizes[13] = {2,3,5,10,20,30,40,50,60,70,80,90,100};
+    int alphabet_sizes[13] = {2,100};
     for (int i = 0; i < 13; ++i) {
         int alphabet_size = alphabet_sizes[i];
         for (int length = 2; length < LENGTH; ++length) {
@@ -115,7 +115,40 @@ void save_ecoli_results() {
     free(buffer);
 }
 
+void save_maximal_lyndon_factor_length() {
+    freopen("/Users/alonger/HSE/stringology/strlib/result_alphabets_max_factor.txt", "wt", stdout);
+    int * buffer = calloc(LENGTH + 1, sizeof(int));
+    char * text = calloc(LENGTH + 1, sizeof(char));
+
+    int alphabet_sizes[13] = {2,3,5,10,20,30,40,50,60,70,80,90,100};
+    for (int i = 0; i < 13; ++i) {
+        int alphabet_size = alphabet_sizes[i];
+        for (int length = 2; length < LENGTH; ++length) {
+            printf("%d %d\n", alphabet_size, length);
+            for (int exp = 0; exp < EXPERIMENTS; ++exp) {
+                int factors_count = duval(rand_string(text, length, alphabet_size), buffer);
+                int max_len = 0;
+                int j = 0;
+                for (j = 0; j < factors_count - 1; ++j) {
+                    if (buffer[j + 1] - buffer[j] > max_len) {
+                        max_len = buffer[j + 1] - buffer[j];
+                    }
+                }
+                // last factor comparison
+                if (length - buffer[j] > max_len) {
+                    max_len = length - buffer[j];
+                }
+                printf("%d ", max_len);
+
+            }
+            printf("\n");
+        }
+    }
+    free(buffer);
+}
+
 int main(int argc, char** argv) {
     save_random_strings_results_for_alphabets_borderless();
+
     return 0;
 }

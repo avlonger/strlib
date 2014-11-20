@@ -1,7 +1,5 @@
 import csv
-import sys
 from collections import defaultdict
-from scipy.optimize import curve_fit
 
 import pylab as pl
 import numpy as np
@@ -16,6 +14,22 @@ if __name__ == '__main__':
     # nice figures only
     counts = defaultdict(lambda: defaultdict(float))
     print 'Reading...'
+    with open('../../result_alphabets_max_factor.txt') as fd:
+        reader = csv.reader(fd, delimiter=' ')
+        try:
+            while True:
+                alphabet_size, length = map(int, reader.next())
+                all_counts = map(int, reader.next()[:-1])
+                counts[alphabet_size][length] = np.average(all_counts)
+        except StopIteration:
+            pass
+
+        for alphabet_size in [2, 100]:
+            lengths = range(2, 349)
+            values = map(counts[alphabet_size].get, lengths)
+            pl.plot(lengths, values, label='Max factor $\sigma = {}$'.format(alphabet_size))
+        pl.legend(loc=4)
+
     with open('../../result_alphabets_borderless.txt') as fd:
         reader = csv.reader(fd, delimiter=' ')
         try:
@@ -26,19 +40,17 @@ if __name__ == '__main__':
         except StopIteration:
             pass
 
-        for alphabet_size in [10]:
-            lengths = sorted(counts[alphabet_size])
+        for alphabet_size in [2, 100]:
+            lengths = range(2, 349)
             values = map(counts[alphabet_size].get, lengths)
-            np_lengths = np.array(lengths, dtype=float)
-            coeff, cov = curve_fit(func,  np_lengths, np.array(values, dtype=float))
-            pl.plot(lengths, values, label='$\sigma = {}$'.format(alphabet_size))
-            pl.plot(lengths, coeff[0] * np_lengths / np.log2(np_lengths), label='fitted $\sigma = {}$'.format(alphabet_size))
+            pl.plot(lengths, values, label='Max borderless $\sigma = {}$'.format(alphabet_size))
         pl.legend(loc=4)
         pl.grid()
         pl.xlabel('Text length')
-        pl.ylabel('Factors count')
-        pl.savefig('../../results/alphabets_borderless_fit.png')
+        pl.savefig('../../results/alphabets_max_factor_borderless.png')
         pl.clf()
+
+
 
         # step = 10
         # lengths = range(2, 50) + range(50, 1001, step)
