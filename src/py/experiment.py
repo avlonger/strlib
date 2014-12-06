@@ -8,7 +8,7 @@ from multiprocessing.pool import ThreadPool
 
 def worker(args):
     size, length = args
-    p = subprocess.Popen(['../../bin/experiment', '-s', str(size), '-a', str(length), 'MINPERIOD'], stdout=subprocess.PIPE)
+    p = subprocess.Popen(['../../bin/experiment', '-s', str(size), '-a', str(length), 'PERIOD_BORDERLESS_DIFF'], stdout=subprocess.PIPE)
     p.wait()
     return size, length, float(p.stdout.read())
 
