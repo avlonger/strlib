@@ -32,8 +32,8 @@ void usage(const char * program_name) {
 int do_for_all_words(int position) {
     int total = 0;
     int value = 0;
-
-    for (char i = MINIMAL_CHAR; i <= ALPHABET; ++i) {
+    char i;
+    for (i = MINIMAL_CHAR; i <= ALPHABET; ++i) {
         CHAR_BUFFER[position] = i;
 
         if (position < LENGTH - 1) {
