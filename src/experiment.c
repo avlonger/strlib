@@ -22,12 +22,14 @@ void usage(const char * program_name) {
     printf("Usage: %s [options] ALGORITHM\n", program_name);
     printf("Calculate some value for words range\n");
     printf("Algorithms:\n");
-    printf("MINPERIOD      find minimal period of a word\n");
-    printf("MAXBORDERLESS  find longest borderless subword\n\n");
+    printf("MINPERIOD               find minimal period of a word\n");
+    printf("MAXBORDERLESS           find longest borderless subword\n");
+    printf("PERIOD_BORDERLESS_DIFF  find difference between min period\n");
+    printf("                        and longest borderless subword\n\n");
     printf("Options:\n");
-    printf(" -l  Find average value for all words of given length\n");
+    printf(" -a  Find average value for all words of given length\n");
     printf(" -s  Alphabet size (default: 2)\n");
-    printf(" -t  Trace\n");
+    printf(" -t  Trace: print results for all generated words\n");
 }
 
 uint64_t do_for_all_words(int position) {
@@ -63,17 +65,21 @@ int longest_borderless() {
     return longest_borderless_subword(CHAR_BUFFER, INT_BUFFER);
 }
 
+int longest_borderless_minimal_period_diff() {
+    return minimal_period() - longest_borderless();
+}
+
 
 int main(int argc, char** argv) {
     int c = 0;
     opterr = 1;
-    while ((c = getopt(argc, argv, "tl:s:")) != -1)
+    while ((c = getopt(argc, argv, "ta:s:")) != -1)
         switch (c)
         {
             case 's':
                 ALPHABET = (char) atoi(optarg);
                 break;
-            case 'l':
+            case 'a':
                 LENGTH = atoi(optarg);
                 break;
             case 't':
@@ -97,15 +103,21 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    CHAR_BUFFER = calloc((size_t) LENGTH + 1, sizeof(char));
-    INT_BUFFER = calloc((size_t) LENGTH + 1, sizeof(int));
-    CHAR_BUFFER[LENGTH] = 0;
-
     if (strcmp(argv[optind], "MINPERIOD") == 0) {
         FUNCTION = minimal_period;
     } else if (strcmp(argv[optind], "MAXBORDERLESS") == 0) {
         FUNCTION = longest_borderless;
+    } else if (strcmp(argv[optind], "PERIOD_BORDERLESS_DIFF") == 0) {
+        FUNCTION = longest_borderless_minimal_period_diff;
+    } else {
+        usage(argv[0]);
+        return -1;
     }
+
+    CHAR_BUFFER = calloc((size_t) LENGTH + 1, sizeof(char));
+    INT_BUFFER = calloc((size_t) LENGTH + 1, sizeof(int));
+    CHAR_BUFFER[LENGTH] = 0;
+
     double count = pow((double) (TRACE) ? ALPHABET - 'A' + 1: ALPHABET, (double) LENGTH);
     printf("%.10f\n", (double) do_for_all_words(0) / count);
 
