@@ -6,7 +6,8 @@ import subprocess
 from multiprocessing.pool import ThreadPool
 
 
-def worker(size, length):
+def worker(args):
+    size, length = args
     p = subprocess.Popen(['../../bin/experiment', '-s', str(size), '-l', str(length), 'MINPERIOD'], stdout=subprocess.PIPE)
     p.wait()
     return size, length, float(p.stdout.read())
@@ -20,5 +21,6 @@ if __name__ == '__main__':
     with open('minimal_period.txt', 'w') as out_file:
         writer = csv.writer(out_file, delimiter='\t')
         writer.writerow(('ALPHABET', 'LENGTH', 'MINPERIOD'))
-        for size, length, method, result in pool.imap_unordered(worker, tasks):
+        for size, length, result in pool.imap_unordered(worker, tasks):
             writer.writerow((size, length, result))
+            out_file.flush()
