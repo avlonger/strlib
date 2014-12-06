@@ -11,7 +11,7 @@
 // some buffers
 char * CHAR_BUFFER;
 int * INT_BUFFER;
-unsigned int (* FUNCTION)();
+int (* FUNCTION)();
 char ALPHABET = 2;
 char MINIMAL_CHAR = 1;
 int LENGTH = 2;
@@ -29,9 +29,9 @@ void usage(const char * program_name) {
     printf(" -t  Trace\n");
 }
 
-unsigned int do_for_all_words(int position) {
-    unsigned int total = 0;
-    unsigned int value = 0;
+uint64_t do_for_all_words(int position) {
+    uint64_t total = 0;
+    int value = 0;
     for (char i = MINIMAL_CHAR; i <= ALPHABET; ++i) {
         CHAR_BUFFER[position] = i;
 
@@ -52,14 +52,14 @@ unsigned int do_for_all_words(int position) {
 }
 
 
-unsigned int minimal_period() {
+int minimal_period() {
     border(CHAR_BUFFER, INT_BUFFER);
-    return (unsigned int) LENGTH - INT_BUFFER[LENGTH - 1];
+    return LENGTH - INT_BUFFER[LENGTH - 1];
 }
 
 
-unsigned int longest_borderless() {
-    return (unsigned int) longest_borderless_subword(CHAR_BUFFER, INT_BUFFER);
+int longest_borderless() {
+    return longest_borderless_subword(CHAR_BUFFER, INT_BUFFER);
 }
 
 
