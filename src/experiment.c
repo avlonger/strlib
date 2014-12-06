@@ -106,8 +106,8 @@ int main(int argc, char** argv) {
     } else if (strcmp(argv[optind], "MAXBORDERLESS") == 0) {
         FUNCTION = longest_borderless;
     }
-
-    printf("%.10f\n", (double) do_for_all_words(0) / pow((double) (TRACE) ? ALPHABET - 'A' + 1: ALPHABET, (double) LENGTH));
+    double count = pow((double) (TRACE) ? ALPHABET - 'A' + 1: ALPHABET, (double) LENGTH);
+    printf("%.10f\n", (double) do_for_all_words(0) / count);
 
     free(CHAR_BUFFER);
     free(INT_BUFFER);
