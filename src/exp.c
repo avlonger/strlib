@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include "algo/duval.h"
 #include "algo/borderless.h"
-
+#include "algo/kmp.h"
+#include <math.h>
 #define LENGTH 350
-#define EXPERIMENTS 10000
+#define EXPERIMENTS 1000
 #define ALPHABET_SIZE 127
 
 char *rand_string(char *str, int n, int alphabet_size) {
@@ -16,6 +17,7 @@ char *rand_string(char *str, int n, int alphabet_size) {
     str[n] = '\0';
     return str;
 }
+
 
 void test_duval_and_naive_results_equality() {
     char * text = calloc(LENGTH + 1, sizeof(char));
@@ -147,8 +149,41 @@ void save_maximal_lyndon_factor_length() {
     free(buffer);
 }
 
+void period_borderless_diff(int alphabet_size, int n, char * text, int * buffer, int position, int * total) {
+    for (char i = 1; i < alphabet_size + 1; ++i) {
+        text[position] = i;
+        if (position == n - 1) {
+            int max_borderless = longest_borderless_subword(text, buffer);
+            border(text, buffer);
+            *total += n - buffer[n - 1] - max_borderless;
+        } else {
+            period_borderless_diff(alphabet_size, n, text, buffer, position + 1, total);
+        }
+    }
+}
+
+void save_period_borderless_diff() {
+    freopen("/Users/alonger/HSE/stringology/strlib/result_alphabets_minimal_period.txt", "wt", stdout);
+    int * buffer = calloc(LENGTH + 1, sizeof(int));
+    char * text = calloc(LENGTH + 1, sizeof(char));
+
+    int alphabet_sizes[2] = {2, 3};
+    for (int i = 0; i < 2; ++i) {
+
+        int alphabet_size = alphabet_sizes[i];
+        for (int length = 2; length < LENGTH; ++length) {
+            int total = 0;
+            period_borderless_diff(alphabet_size, length, text, buffer, 0, &total);
+            printf("%d %d %f\n", alphabet_size, length, (double) total / pow((double) alphabet_size, length));
+            fflush(stdout);
+        }
+    }
+    free(buffer);
+}
+
+
 int main(int argc, char** argv) {
-    save_random_strings_results_for_alphabets_borderless();
+    save_period_borderless_diff();
 
     return 0;
 }

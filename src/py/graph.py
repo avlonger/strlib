@@ -14,12 +14,11 @@ if __name__ == '__main__':
     # nice figures only
     counts = defaultdict(lambda: defaultdict(float))
     print 'Reading...'
-    with open('../../result_alphabets_max_factor.txt') as fd:
+    with open('../../result_alphabets_minimal_period.txt') as fd:
         reader = csv.reader(fd, delimiter=' ')
         try:
             while True:
-                alphabet_size, length = map(int, reader.next())
-                all_counts = map(int, reader.next()[:-1])
+                alphabet_size, length, diff = map(int, reader.next())
                 counts[alphabet_size][length] = np.average(all_counts)
         except StopIteration:
             pass
@@ -30,25 +29,25 @@ if __name__ == '__main__':
             pl.plot(lengths, values, label='Max factor $\sigma = {}$'.format(alphabet_size))
         pl.legend(loc=4)
 
-    with open('../../result_alphabets_borderless.txt') as fd:
-        reader = csv.reader(fd, delimiter=' ')
-        try:
-            while True:
-                alphabet_size, length = map(int, reader.next())
-                all_counts = map(int, reader.next()[:-1])
-                counts[alphabet_size][length] = np.average(all_counts)
-        except StopIteration:
-            pass
-
-        for alphabet_size in [2, 100]:
-            lengths = range(2, 349)
-            values = map(counts[alphabet_size].get, lengths)
-            pl.plot(lengths, values, label='Max borderless $\sigma = {}$'.format(alphabet_size))
-        pl.legend(loc=4)
-        pl.grid()
-        pl.xlabel('Text length')
-        pl.savefig('../../results/alphabets_max_factor_borderless.png')
-        pl.clf()
+    # with open('../../result_alphabets_borderless.txt') as fd:
+    #     reader = csv.reader(fd, delimiter=' ')
+    #     try:
+    #         while True:
+    #             alphabet_size, length = map(int, reader.next())
+    #             all_counts = map(int, reader.next()[:-1])
+    #             counts[alphabet_size][length] = np.average(all_counts)
+    #     except StopIteration:
+    #         pass
+    #
+    #     for alphabet_size in [2, 100]:
+    #         lengths = range(2, 349)
+    #         values = map(counts[alphabet_size].get, lengths)
+    #         pl.plot(lengths, values, label='Max borderless $\sigma = {}$'.format(alphabet_size))
+    #     pl.legend(loc=4)
+    #     pl.grid()
+    #     pl.xlabel('Text length')
+    #     pl.savefig('../../results/alphabets_max_factor_borderless.png')
+    #     pl.clf()
 
 
 
