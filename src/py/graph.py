@@ -14,20 +14,27 @@ if __name__ == '__main__':
     # nice figures only
     counts = defaultdict(lambda: defaultdict(float))
     print 'Reading...'
-    with open('../../result_alphabets_minimal_period.txt') as fd:
-        reader = csv.reader(fd, delimiter=' ')
+    with open('../../min_period_max_borderless_diff.txt') as fd:
+        reader = csv.reader(fd, delimiter='\t')
+        reader.next()
         try:
             while True:
-                alphabet_size, length, diff = map(int, reader.next())
-                counts[alphabet_size][length] = np.average(all_counts)
+                alphabet_size, length, diff = reader.next()
+                alphabet_size = int(alphabet_size)
+                length = int(length)
+                diff = float(diff)
+                counts[alphabet_size][length] = diff
         except StopIteration:
             pass
 
-        for alphabet_size in [2, 100]:
-            lengths = range(2, 349)
+        for alphabet_size in [2, 3, 5]:
+            lengths = sorted(counts[alphabet_size])
             values = map(counts[alphabet_size].get, lengths)
-            pl.plot(lengths, values, label='Max factor $\sigma = {}$'.format(alphabet_size))
-        pl.legend(loc=4)
+            pl.plot(lengths, values, label='MinPeriod - $\sigma = {}$'.format(alphabet_size))
+        pl.legend(loc=2)
+        pl.grid()
+        pl.xlabel('Text length')
+        pl.savefig('../../results/min_period_max_borderless_diff.png')
 
     # with open('../../result_alphabets_borderless.txt') as fd:
     #     reader = csv.reader(fd, delimiter=' ')
