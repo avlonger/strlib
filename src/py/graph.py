@@ -26,15 +26,14 @@ if __name__ == '__main__':
         except StopIteration:
             pass
 
-        for alphabet_size in [3]:
+        for alphabet_size in [2, 3, 5]:
             lengths = sorted(counts[alphabet_size])
             values = map(lambda x: counts[alphabet_size].get(x) * 1.0 / alphabet_size ** x, lengths)
-            print lengths, values
             pl.plot(lengths, values, label='Diff- $\sigma = {}$'.format(alphabet_size))
         pl.legend(loc=2)
         pl.grid()
         pl.xlabel('Text length')
-        pl.savefig('../../results/min_period_max_borderless_diff.png')
+        pl.savefig('../../results/diff_2_3_5.png')
 
     # with open('../../result_alphabets_borderless.txt') as fd:
     #     reader = csv.reader(fd, delimiter=' ')
