@@ -26,7 +26,7 @@ if __name__ == '__main__':
         except StopIteration:
             pass
 
-        for alphabet_size in [5]:
+        for alphabet_size in [4]:
             lengths = sorted(counts[alphabet_size])
             values = map(lambda x: counts[alphabet_size].get(x) * 1.0 / alphabet_size ** x, lengths)
             print lengths, values
@@ -34,8 +34,7 @@ if __name__ == '__main__':
         pl.legend(loc=2)
         pl.grid()
         pl.xlabel('Text length')
-        pl.savefig('../../results/diff_5.png')
-        pl.savefig('min_period_max_borderless_diff.png')
+        pl.savefig('../../results/diff_4.png')
 
     # with open('../../result_alphabets_borderless.txt') as fd:
     #     reader = csv.reader(fd, delimiter=' ')
