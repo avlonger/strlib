@@ -9,28 +9,28 @@ def func(n, c):
     return c * n / np.log2(n)
 
 if __name__ == '__main__':
-    # you can see a lot of hard-coded numbers here
-    # because this script is used for creating
-    # nice figures only
+    # a lot of hard-coded numbers here
     counts = defaultdict(lambda: defaultdict(float))
     print 'Reading...'
-    with open('../../min_period_max_borderless_diff.txt') as fd:
+    with open('min_period_max_borderless_diff.txt') as fd:
         reader = csv.reader(fd, delimiter='\t')
         reader.next()
         try:
             while True:
-                alphabet_size, length, diff = reader.next()
+                alphabet_size, length, diff, _ = reader.next()
                 alphabet_size = int(alphabet_size)
                 length = int(length)
                 diff = float(diff)
-                counts[alphabet_size][length] = diff
+                if diff < 100000000:
+                    counts[alphabet_size][length] += diff
         except StopIteration:
             pass
 
-        for alphabet_size in [2, 3, 5]:
+        for alphabet_size in [3]:
             lengths = sorted(counts[alphabet_size])
-            values = map(counts[alphabet_size].get, lengths)
-            pl.plot(lengths, values, label='MinPeriod - $\sigma = {}$'.format(alphabet_size))
+            values = map(lambda x: counts[alphabet_size].get(x) * 1.0 / alphabet_size ** x, lengths)
+            print lengths, values
+            pl.plot(lengths, values, label='Diff- $\sigma = {}$'.format(alphabet_size))
         pl.legend(loc=2)
         pl.grid()
         pl.xlabel('Text length')

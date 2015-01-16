@@ -42,16 +42,19 @@ if __name__ == '__main__':
     for size in xrange(2, 3):
         p = [0, 0]
         for n in xrange(2, 30):
-            non_borderless = 0
-            diff = 0
+            q = [0] * (n + 1)
+            words = [[] for i in xrange(n + 1)]
             for word in all_words(AVAILABLE_LETTERS[:size], n):
                 process = subprocess.Popen(['../../bin/border', word], stdout=subprocess.PIPE)
                 border_length = int(process.stdout.read().strip())
-                period = n - border_length
-                process = subprocess.Popen(['../../bin/borderless', word], stdout=subprocess.PIPE)
-                borderless = int(process.stdout.read().split()[1])
-                diff += period - borderless
-            print size, n, diff * 1.0 / size ** n
+                q[n - border_length] += 1
+                words[n - border_length].append(word)
+            print 'sigma =', size, 'n =', n
+            for i, q_i in enumerate(q[1:]):
+                i += 1
+                print 'i =', i, 'q_i =', q_i, 'est =', size ** i - sum(size ** j for j in [1, 2, 3, 5, 7, 11] if j < i and i % j == 0), ':'
+                # print '\n'.join(words[i])
+            print
             # answer = size * p[n - 1]
             # if n % 2 == 0:
             #     answer += size ** (n / 2) - p[n / 2]

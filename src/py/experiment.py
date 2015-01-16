@@ -2,6 +2,7 @@
 """
 """
 import csv
+import time
 import argparse
 import datetime
 import subprocess
@@ -10,10 +11,14 @@ from multiprocessing.pool import ThreadPool
 
 
 def worker(args):
-    size, length, algo, binary = args
-    p = subprocess.Popen([binary, '-s', str(size), '-a', str(length), algo], stdout=subprocess.PIPE)
+    size, length, algo, binary, prefix, prefix_length = args
+    start = time.time()
+    p = subprocess.Popen(
+        [binary, '-a', str(size), '-l', str(length), '-f', str(prefix_length), '-p', str(prefix), algo],
+        stdout=subprocess.PIPE
+    )
     p.wait()
-    return size, length, float(p.stdout.read())
+    return size, length, p.stdout.read().strip(), time.time() - start
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Calculate some statistics')
@@ -32,17 +37,30 @@ if __name__ == '__main__':
 
     pool = ThreadPool(options.cpu_count)
 
-    tasks = []
-    for alphabet_size in options.alphabets:
-        for length in options.lengths:
-            tasks.append((alphabet_size, length, options.algo, options.binary))
-
     if options.filename is None:
         options.filename = '{}-{}.txt'.format(options.algo, datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S'))
 
     with open(options.filename, 'w') as out_file:
         writer = csv.writer(out_file, delimiter='\t')
-        writer.writerow(('ALPHABET', 'LENGTH', options.algo))
-        for size, length, result in pool.imap_unordered(worker, tasks):
-            writer.writerow((size, length, '{:.10f}'.format(result)))
-            out_file.flush()
+        writer.writerow(('ALPHABET', 'LENGTH', 'SUM', options.algo, 'TIME'))
+        for alphabet_size in options.alphabets:
+
+            tasks_count = 1
+            fixed_prefix_length = 0
+            while tasks_count < options.cpu_count:
+                tasks_count *= alphabet_size
+                fixed_prefix_length += 1
+
+            for length in options.lengths:
+                if options.cpu_count < alphabet_size ** length:
+                    tasks = [
+                        (alphabet_size, length, options.algo,
+                         options.binary, i, fixed_prefix_length) for i in xrange(tasks_count)
+                    ]
+                else:
+                    tasks = [(alphabet_size, length, options.algo, options.binary, 0, 0)]
+
+
+                for size, length, result, spent_time in pool.imap_unordered(worker, tasks):
+                    writer.writerow((size, length, result, '{:.2f}'.format(spent_time)))
+                    out_file.flush()
