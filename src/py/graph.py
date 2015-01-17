@@ -12,7 +12,7 @@ if __name__ == '__main__':
     # a lot of hard-coded numbers here
     counts = defaultdict(lambda: defaultdict(float))
     print 'Reading...'
-    with open('min_period_max_borderless_diff.txt') as fd:
+    with open('max_borderless.txt') as fd:
         reader = csv.reader(fd, delimiter='\t')
         reader.next()
         try:
@@ -21,19 +21,18 @@ if __name__ == '__main__':
                 alphabet_size = int(alphabet_size)
                 length = int(length)
                 diff = float(diff)
-                if diff < 100000000:
-                    counts[alphabet_size][length] += diff
+                counts[alphabet_size][length] += diff
         except StopIteration:
             pass
 
-        for alphabet_size in [4]:
+        for alphabet_size in [2, 3, 4, 5]:
             lengths = sorted(counts[alphabet_size])
             values = map(lambda x: counts[alphabet_size].get(x) * 1.0 / alphabet_size ** x, lengths)
             pl.plot(lengths, values, label='Diff- $\sigma = {}$'.format(alphabet_size))
         pl.legend(loc=2)
         pl.grid()
         pl.xlabel('Text length')
-        pl.savefig('../../results/diff_4.png')
+        pl.savefig('../../results/max_2_3_4_5.png')
 
     # with open('../../result_alphabets_borderless.txt') as fd:
     #     reader = csv.reader(fd, delimiter=' ')

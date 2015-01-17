@@ -52,14 +52,13 @@ if __name__ == '__main__':
                 fixed_prefix_length += 1
 
             for length in options.lengths:
-                if options.cpu_count < alphabet_size ** length:
+                if options.cpu_count < alphabet_size ** length and length > 5:
                     tasks = [
                         (alphabet_size, length, options.algo,
                          options.binary, i, fixed_prefix_length) for i in xrange(tasks_count)
                     ]
                 else:
                     tasks = [(alphabet_size, length, options.algo, options.binary, 0, 0)]
-
 
                 for size, length, result, spent_time in pool.imap_unordered(worker, tasks):
                     writer.writerow((size, length, result, '{:.2f}'.format(spent_time)))
