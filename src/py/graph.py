@@ -30,7 +30,7 @@ if __name__ == '__main__':
             lengths = sorted(counts[alphabet_size])
             values = map(lambda x: x - counts[alphabet_size].get(x) * 1.0 / alphabet_size ** x, lengths)
             print alphabet_size, ' ', ' '.join(map(lambda x: '{:.3f}'.format(x).rjust(6), values))
-            pl.plot(lengths, values, label='Diff- $\sigma = {}$'.format(alphabet_size))
+            pl.plot(lengths, values, label='$\sigma = {}$'.format(alphabet_size))
         pl.legend(loc=2)
         pl.grid()
         pl.xlabel('Text length')
