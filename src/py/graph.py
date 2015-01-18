@@ -24,7 +24,8 @@ if __name__ == '__main__':
                 counts[alphabet_size][length] += diff
         except StopIteration:
             pass
-
+        import pprint
+        pprint.pprint(dict(counts))
         print 'q', ' ', ' '.join(map(lambda x: str(x).rjust(6), counts[2]))
         for alphabet_size in [2, 3, 4, 5]:
             lengths = sorted(counts[alphabet_size])
