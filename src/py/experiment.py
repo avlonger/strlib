@@ -14,7 +14,10 @@ def worker(args):
     size, length, algo, binary, prefix, prefix_length = args
     start = time.time()
     p = subprocess.Popen(
-        [binary, '-a', str(size), '-l', str(length), '-f', str(prefix_length), '-p', str(prefix), algo],
+        [
+            binary, '-a', str(size), '-b', str(length), '-e', str(length), '-s', '1',
+            '-f', str(prefix_length), '-p', str(prefix), algo
+        ],
         stdout=subprocess.PIPE
     )
     p.wait()
@@ -32,7 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--filename', help='Output file')
     parser.add_argument('-b', '--binary', help='Binary to use', default='../../bin/experiment')
     parser.add_argument('algo', metavar='ALGORITHM',
-                        choices=('MINPERIOD', 'MAXBORDERLESS', 'PERIOD_BORDERLESS_DIFF'))
+                        choices=('MAXBORDERLESS_BORDER',))
     options = parser.parse_args()
 
     pool = ThreadPool(options.cpu_count)

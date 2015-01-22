@@ -25,7 +25,10 @@ if __name__ == '__main__':
         except StopIteration:
             pass
         import pprint
-        pprint.pprint(dict(counts))
+        for size, values in counts.iteritems():
+            for length, value in values.iteritems():
+                print size, length, int(value)
+        # pprint.pprint(dict(counts))
         print 'q', ' ', ' '.join(map(lambda x: str(x).rjust(6), counts[2]))
         for alphabet_size in [3, 4, 5]:
             lengths = sorted(counts[alphabet_size])
