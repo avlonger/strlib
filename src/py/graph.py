@@ -27,7 +27,7 @@ if __name__ == '__main__':
         import pprint
         pprint.pprint(dict(counts))
         print 'q', ' ', ' '.join(map(lambda x: str(x).rjust(6), counts[2]))
-        for alphabet_size in [2, 3, 4, 5]:
+        for alphabet_size in [3, 4, 5]:
             lengths = sorted(counts[alphabet_size])
             values = map(lambda x: x - counts[alphabet_size].get(x) * 1.0 / alphabet_size ** x, lengths)
             print alphabet_size, ' ', ' '.join(map(lambda x: '{:.3f}'.format(x).rjust(6), values))
@@ -35,8 +35,8 @@ if __name__ == '__main__':
             pl.axes().set_xlim(2, 17)
         pl.legend(loc=2)
         pl.grid()
-        pl.xlabel('Text length')
-        pl.savefig('../../results/length_minus_max_borderless_2_3_4_5.png')
+        pl.xlabel('String length')
+        pl.savefig('../../results/length_minus_max_borderless_3_4_5.png')
 
     # with open('../../result_alphabets_borderless.txt') as fd:
     #     reader = csv.reader(fd, delimiter=' ')
