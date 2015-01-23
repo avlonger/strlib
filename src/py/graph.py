@@ -13,33 +13,23 @@ if __name__ == '__main__':
     counts = defaultdict(lambda: defaultdict(float))
     print 'Reading...'
     with open('max_borderless.txt') as fd:
-        reader = csv.reader(fd, delimiter='\t')
-        reader.next()
-        try:
-            while True:
-                alphabet_size, length, diff, _ = reader.next()
-                alphabet_size = int(alphabet_size)
-                length = int(length)
-                diff = float(diff)
-                counts[alphabet_size][length] += diff
-        except StopIteration:
-            pass
-        import pprint
-        for size, values in counts.iteritems():
-            for length, value in values.iteritems():
-                print size, length, int(value)
-        # pprint.pprint(dict(counts))
+        for line in fd:
+            alphabet_size, length, diff = line.split()
+            alphabet_size = int(alphabet_size)
+            length = int(length)
+            diff = float(diff)
+            counts[alphabet_size][length] += diff
+
         print 'q', ' ', ' '.join(map(lambda x: str(x).rjust(6), counts[2]))
-        for alphabet_size in [3, 4, 5]:
+        for alphabet_size in [2]:
             lengths = sorted(counts[alphabet_size])
             values = map(lambda x: x - counts[alphabet_size].get(x) * 1.0 / alphabet_size ** x, lengths)
             print alphabet_size, ' ', ' '.join(map(lambda x: '{:.3f}'.format(x).rjust(6), values))
             pl.plot(lengths, values, label='$\sigma = {}$'.format(alphabet_size))
-            pl.axes().set_xlim(2, 17)
         pl.legend(loc=2)
         pl.grid()
         pl.xlabel('String length')
-        pl.savefig('../../results/length_minus_max_borderless_3_4_5.png')
+        pl.savefig('length_minus_max_borderless_3_4_5.png')
 
     # with open('../../result_alphabets_borderless.txt') as fd:
     #     reader = csv.reader(fd, delimiter=' ')
