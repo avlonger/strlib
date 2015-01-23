@@ -15,7 +15,7 @@ def worker(args):
     start = time.time()
     p = subprocess.Popen(
         [
-            binary, '-a', str(size), '-b', str(length), '-e', str(length), '-s', '1',
+            binary, '-a', str(size), '-b', str(length), '-e', str(length + 1), '-s', '1',
             '-f', str(prefix_length), '-p', str(prefix), algo
         ],
         stdout=subprocess.PIPE
