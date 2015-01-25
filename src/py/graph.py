@@ -40,30 +40,31 @@ if __name__ == '__main__':
                 counts[alphabet_size][length] = val
 
         # save figures for binary alphabet
-        keys2 = sorted(counts[2])
-        values2 = map(lambda x: counts[2].get(x) * 1.0 / 2 ** x, keys2)
-        pl.plot(keys2, values2, label='$\sigma = 2$', color='k')
-        pl.axes().set_xlim(min(keys2), max(keys2))
-        save_me('max_{}_2.pdf'.format(name), font)
+        if name == 'border':
+            keys2 = sorted(counts[2])
+            values2 = map(lambda x: counts[2].get(x) * 1.0 / 2 ** x, keys2)
+            pl.plot(keys2, values2, label='$\sigma = 2$', color='k')
+            pl.axes().set_xlim(min(keys2), max(keys2))
+            save_me('n_minus_min_period_2.pdf', font)
+        else:
+            values2 = map(lambda x: x - counts[2].get(x) * 1.0 / 2 ** x, keys2)
+            pl.plot(keys2, values2, label='$\sigma = 2$', color='k')
+            pl.axes().set_xlim(min(keys2), max(keys2))
+            save_me('n_minus_max_{}_2.pdf'.format(name), font)
 
-        values2 = map(lambda x: x - counts[2].get(x) * 1.0 / 2 ** x, keys2)
-        pl.plot(keys2, values2, label='$\sigma = 2$', color='k')
-        pl.axes().set_xlim(min(keys2), max(keys2))
-        save_me('n_minus_max_{}_2.pdf'.format(name), font)
-
-        # save figures for all except 2
-        for i, alphabet in enumerate([2, 3, 4, 5]):
-            keys = sorted(counts[alphabet])[:17]
-            values = map(lambda x: counts[alphabet].get(x) * 1.0 / alphabet ** x, keys)
-            pl.plot(keys, values, label='$\sigma = {}$'.format(alphabet), color='k', dashes=dashes[i])
-        pl.axes().set_xlim(min(keys), max(keys))
-        pl.legend(loc=2, prop=font)
-        save_me('max_{}_2_3_4_5.pdf'.format(name), font)
-
-        for i, alphabet in enumerate([2, 3, 4, 5]):
-            keys = sorted(counts[alphabet])[:17]
-            values = map(lambda x: x - counts[alphabet].get(x) * 1.0 / alphabet ** x, keys)
-            pl.plot(keys, values, label='$\sigma = {}$'.format(alphabet), color='k', dashes=dashes[i])
-        pl.axes().set_xlim(min(keys), max(keys))
-        pl.legend(loc=2, prop=font)
-        save_me('n_minus_max_{}_2_3_4_5.pdf'.format(name), font)
+        if name == 'border':
+            for i, alphabet in enumerate([2, 3, 4, 5]):
+                keys = sorted(counts[alphabet])[:17]
+                values = map(lambda x: counts[alphabet].get(x) * 1.0 / alphabet ** x, keys)
+                pl.plot(keys, values, label='$\sigma = {}$'.format(alphabet), color='k', dashes=dashes[i])
+            pl.axes().set_xlim(min(keys), max(keys))
+            pl.legend(loc=2, prop=font)
+            save_me('n_minus_min_period_2_3_4_5.pdf', font)
+        else:
+            for i, alphabet in enumerate([2, 3, 4, 5]):
+                keys = sorted(counts[alphabet])[:17]
+                values = map(lambda x: x - counts[alphabet].get(x) * 1.0 / alphabet ** x, keys)
+                pl.plot(keys, values, label='$\sigma = {}$'.format(alphabet), color='k', dashes=dashes[i])
+            pl.axes().set_xlim(min(keys), max(keys))
+            pl.legend(loc=2, prop=font)
+            save_me('n_minus_max_{}_2_3_4_5.pdf'.format(name), font)
