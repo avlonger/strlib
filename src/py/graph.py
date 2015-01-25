@@ -7,6 +7,7 @@ import matplotlib.font_manager as fm
 def save_me(name, font, clear=True):
     set_font(font)
     pl.savefig('final_figs/' + name)
+    pl.savefig('final_figs/' + name[:-4] + '.png')
     if clear:
         pl.axes().clear()
 
