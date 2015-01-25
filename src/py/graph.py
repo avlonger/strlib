@@ -10,17 +10,20 @@ def func(n, c):
 
 if __name__ == '__main__':
     # a lot of hard-coded numbers here
-    counts = defaultdict(lambda: defaultdict(float))
+    counts = defaultdict(lambda: defaultdict(int))
     print 'Reading...'
     with open('max_border.txt') as fd:
         for line in fd:
             alphabet_size, length, diff = line.split()
             alphabet_size = int(alphabet_size)
             length = int(length)
-            diff = float(diff)
+            diff = int(diff)
             counts[alphabet_size][length] += diff
 
-        print 'q', ' ', ' '.join(map(lambda x: str(x).rjust(6), counts[2]))
+        for a, vals in counts.iteritems():
+            for l, val in vals.iteritems():
+                print a, l, val
+
         for alphabet_size in [2]:
             lengths = sorted(counts[alphabet_size])
             values = map(lambda x: counts[alphabet_size].get(x) * 1.0 / alphabet_size ** x, lengths)
@@ -30,7 +33,7 @@ if __name__ == '__main__':
         pl.legend(loc=2)
         pl.grid()
         pl.xlabel('String length')
-        pl.savefig('length_minus_min_period_2.png')
+        # pl.savefig('length_minus_max_borderless_2.png')
 
     # with open('../../result_alphabets_borderless.txt') as fd:
     #     reader = csv.reader(fd, delimiter=' ')
