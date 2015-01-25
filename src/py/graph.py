@@ -1,138 +1,68 @@
-import csv
 from collections import defaultdict
 
 import pylab as pl
-import numpy as np
+import matplotlib.font_manager as fm
 
 
-def func(n, c):
-    return c * n / np.log2(n)
+def save_me(name, font, clear=True):
+    set_font(font)
+    pl.savefig('final_figs/' + name)
+    if clear:
+        pl.axes().clear()
+
+
+def set_font(font):
+    pl.xlabel('String length', fontproperties=font)
+    for label in pl.axes().get_xticklabels():
+        label.set_fontproperties(font)
+    for label in pl.axes().get_yticklabels():
+        label.set_fontproperties(font)
+
+dashes = [
+    [],
+    [5, 5],
+    [5, 3, 1, 3],
+    [1, 1],
+]
 
 if __name__ == '__main__':
-    # a lot of hard-coded numbers here
-    counts = defaultdict(lambda: defaultdict(int))
-    print 'Reading...'
-    with open('max_border.txt') as fd:
-        for line in fd:
-            alphabet_size, length, diff = line.split()
-            alphabet_size = int(alphabet_size)
-            length = int(length)
-            diff = int(diff)
-            counts[alphabet_size][length] += diff
 
-        for a, vals in counts.iteritems():
-            for l, val in vals.iteritems():
-                print a, l, val
+    font = fm.FontProperties(fname='/Users/alonger/HSE/cmunrm.ttf', size=14)
 
-        for alphabet_size in [2]:
-            lengths = sorted(counts[alphabet_size])
-            values = map(lambda x: counts[alphabet_size].get(x) * 1.0 / alphabet_size ** x, lengths)
-            print alphabet_size, ' ', ' '.join(map(lambda x: '{:.3f}'.format(x).rjust(6), values))
-            pl.plot(lengths, values, label='$\sigma = {}$'.format(alphabet_size))
-            pl.axes().set_xlim(2, 35)
-        pl.legend(loc=2)
-        pl.grid()
-        pl.xlabel('String length')
-        # pl.savefig('length_minus_max_borderless_2.png')
+    for name in ['border', 'borderless']:
 
-    # with open('../../result_alphabets_borderless.txt') as fd:
-    #     reader = csv.reader(fd, delimiter=' ')
-    #     try:
-    #         while True:
-    #             alphabet_size, length = map(int, reader.next())
-    #             all_counts = map(int, reader.next()[:-1])
-    #             counts[alphabet_size][length] = np.average(all_counts)
-    #     except StopIteration:
-    #         pass
-    #
-    #     for alphabet_size in [2, 100]:
-    #         lengths = range(2, 349)
-    #         values = map(counts[alphabet_size].get, lengths)
-    #         pl.plot(lengths, values, label='Max borderless $\sigma = {}$'.format(alphabet_size))
-    #     pl.legend(loc=4)
-    #     pl.grid()
-    #     pl.xlabel('Text length')
-    #     pl.savefig('../../results/alphabets_max_factor_borderless.png')
-    #     pl.clf()
+        counts = defaultdict(lambda: defaultdict(int))
 
+        with open('max_{}.txt'.format(name)) as fd:
+            for line in fd:
+                alphabet_size, length, val = map(int, line.strip().split())
+                counts[alphabet_size][length] = val
 
+        # save figures for binary alphabet
+        keys2 = sorted(counts[2])
+        values2 = map(lambda x: counts[2].get(x) * 1.0 / 2 ** x, keys2)
+        pl.plot(keys2, values2, label='$\sigma = 2$', color='k')
+        pl.axes().set_xlim(min(keys2), max(keys2))
+        save_me('max_{}_2.pdf'.format(name), font)
 
-        # step = 10
-        # lengths = range(2, 50) + range(50, 1001, step)
-        # for alphabet_size in [2, 3, 5, 10, 100]:
-        #     values = []
-        #     for i, length in enumerate(lengths[:-1]):
-        #         values.append(np.average(
-        #             map(counts[alphabet_size].get, xrange(length, lengths[i + 1]))
-        #         ))
-        #     pl.plot(range(2, 50) + range(55, 1001, step), values, label='$\sigma = {}$'.format(alphabet_size))
-        # pl.legend(loc=4)
-        # pl.xlabel('Text length')
-        # pl.ylabel('Factors count')
-        # pl.savefig('../../results/alphabets-borderless-smooth.png')
-        # pl.clf()
-        #
-        # for length in [10, 100] + range(200, 1001, 200):
-        #     sizes = sorted(counts)
-        #     pl.plot(sizes, map(lambda x: counts[x][length], sizes), label='$n = {}$'.format(length))
-        # pl.legend(loc=4)
-        # pl.xlabel('Alphabet size')
-        # pl.ylabel('Factors count')
-        # pl.savefig('../../results/lengths_borderless.png')
-        # pl.clf()
-        #
-        # for length in [10, 100, 500, 1000]:
-        #     sizes = sorted(counts)
-        #     pl.plot(sizes, map(lambda x: counts[x][length], sizes))
-        #     pl.title('Text length = {}'.format(length))
-        #     pl.xlabel('Alphabet size')
-        #     pl.ylabel('Factors count')
-        #     pl.savefig('../../results/length-borderless-{}.png'.format(length))
-        #     pl.clf()
-        #
-        # for length in [10, 100, 500, 1000]:
-        #     step = 10
-        #     sizes = range(2, 10) + range(10, 101, step)
-        #     values = []
-        #     for i, size in enumerate(sizes[:-1]):
-        #         values.append(np.average(
-        #             map(lambda x: counts[x][length], xrange(size, sizes[i + 1]))
-        #         ))
-        #     pl.plot(range(2, 10) + range(15, 101, 10), values)
-        #     pl.title('Text length = {}'.format(length))
-        #     pl.xlabel('Alphabet size')
-        #     pl.ylabel('Factors count')
-        #     pl.savefig('../../results/smooth-length-borderless-{}.png'.format(length))
-        #     pl.clf()
+        values2 = map(lambda x: x - counts[2].get(x) * 1.0 / 2 ** x, keys2)
+        pl.plot(keys2, values2, label='$\sigma = 2$', color='k')
+        pl.axes().set_xlim(min(keys2), max(keys2))
+        save_me('n_minus_max_{}_2.pdf'.format(name), font)
 
-    # genom_counts = defaultdict(list)
-    # with open(sys.argv[2]) as fd:
-    #     reader = csv.reader(fd, delimiter=' ')
-    #     for line in reader:
-    #         length, count = map(int, line)
-    #         genom_counts[length].append(count)
-    #
-    #     for length, counts_list in genom_counts.iteritems():
-    #         genom_counts[length] = sum(counts_list) * 1.0 / len(counts_list)
-    #
-    #     genom_lengths = sorted(genom_counts)
-    #
-    #     pl.plot(genom_lengths, map(genom_counts.get, genom_lengths))
-    #     pl.title('E.coli')
-    #     pl.xlabel('Text length')
-    #     pl.ylabel('Factors count')
-    #     pl.savefig('../../results/ecoli.png')
-    #     pl.clf()
-    #
-    #     # plot factors count for alphabet size == 4
-    #     # to compare it to E.coli
-    #     lengths = sorted(counts[4])
-    #     pl.plot(lengths, map(counts[4].get, lengths), 'b', label='Random words')
-    #     pl.plot(genom_lengths, map(genom_counts.get, genom_lengths), 'r', label='E.coli')
-    #     pl.title('E.coli and random words comparison')
-    #     pl.xlabel('Text length')
-    #     pl.ylabel('Factors count')
-    #     pl.savefig('../../results/ecoli-compare.png')
+        # save figures for all except 2
+        for i, alphabet in enumerate([2, 3, 4, 5]):
+            keys = sorted(counts[alphabet])[:17]
+            values = map(lambda x: counts[alphabet].get(x) * 1.0 / alphabet ** x, keys)
+            pl.plot(keys, values, label='$\sigma = {}$'.format(alphabet), color='k', dashes=dashes[i])
+        pl.axes().set_xlim(min(keys), max(keys))
+        pl.legend(loc=2, prop=font)
+        save_me('max_{}_2_3_4_5.pdf'.format(name), font)
 
-
-
+        for i, alphabet in enumerate([2, 3, 4, 5]):
+            keys = sorted(counts[alphabet])[:17]
+            values = map(lambda x: x - counts[alphabet].get(x) * 1.0 / alphabet ** x, keys)
+            pl.plot(keys, values, label='$\sigma = {}$'.format(alphabet), color='k', dashes=dashes[i])
+        pl.axes().set_xlim(min(keys), max(keys))
+        pl.legend(loc=2, prop=font)
+        save_me('n_minus_max_{}_2_3_4_5.pdf'.format(name), font)
