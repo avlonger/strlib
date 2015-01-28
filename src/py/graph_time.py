@@ -7,6 +7,7 @@ import matplotlib.font_manager as fm
 
 def set_font(font):
     pl.xlabel('String length', fontproperties=font)
+    pl.tight_layout()
     for label in pl.axes().get_xticklabels():
         label.set_fontproperties(font)
     for label in pl.axes().get_yticklabels():
@@ -22,7 +23,7 @@ def save_me(name, font):
 
 if __name__ == '__main__':
 
-    font = fm.FontProperties(fname='/Users/alonger/HSE/cmunrm.ttf', size=14)
+    font = fm.FontProperties(fname='/Users/alonger/HSE/cmunrm.ttf', size=20)
 
     with open('time.txt') as fd:
         lines = fd.read().strip().splitlines()
