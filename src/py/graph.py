@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 
 import pylab as pl
 import matplotlib.font_manager as fm
@@ -27,11 +27,18 @@ dashes = [
     [1, 1],
 ]
 
+Entity = namedtuple('Entity', ['name', 'readable_name'])
+
 if __name__ == '__main__':
 
     font = fm.FontProperties(fname='/Users/alonger/HSE/cmunrm.ttf', size=19)
 
-    for name in ['border', 'borderless']:
+    entities = [
+        Entity('borderless', 'unbordered factor'),
+        Entity('borderless_prefix', 'unbordered prefix'),
+    ]
+
+    for name, verbose_name in entities:
 
         counts = defaultdict(lambda: defaultdict(int))
 
@@ -40,6 +47,7 @@ if __name__ == '__main__':
                 alphabet_size, length, val = map(int, line.strip().split())
                 counts[alphabet_size][length] = val
 
+        for
         # save figures for binary alphabet
         if name == 'border':
             keys2 = sorted(counts[2])
@@ -48,6 +56,7 @@ if __name__ == '__main__':
             pl.axes().set_xlim(min(keys2), max(keys2))
             save_me('n_minus_min_period_2.pdf', font)
         else:
+            keys2 = sorted(counts[2])
             values2 = map(lambda x: x - counts[2].get(x) * 1.0 / 2 ** x, keys2)
             pl.plot(keys2, values2, label='$\sigma = 2$', color='k')
             pl.axes().set_xlim(min(keys2), max(keys2))
