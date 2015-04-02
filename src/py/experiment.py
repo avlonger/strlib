@@ -73,4 +73,3 @@ if __name__ == '__main__':
 
                     writer.writerow((size, length, result, '{:.2f}'.format(spent_time)))
                     out_file.flush()
-
