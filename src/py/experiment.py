@@ -21,7 +21,7 @@ def worker(args):
         stdout=subprocess.PIPE
     )
     p.wait()
-    return size, length, p.stdout.read().strip(), time.time() - start
+    return size, length, long(p.stdout.read().strip().split()[1]), time.time() - start
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Calculate some statistics')
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--filename', help='Output file')
     parser.add_argument('-b', '--binary', help='Binary to use', default='../../bin/experiment')
     parser.add_argument('algo', metavar='ALGORITHM',
-                        choices=('MAXBORDERLESS_BORDER',))
+                        choices=('MAXBORDERLESS_BORDER', 'MAXBORDERLESS_PREFIX'))
     options = parser.parse_args()
 
     pool = ThreadPool(options.cpu_count)
@@ -49,13 +49,16 @@ if __name__ == '__main__':
         for alphabet_size in options.alphabets:
 
             tasks_count = 1
-            fixed_prefix_length = 0
+            # because we can multiply the answer for A...
+            # by the alphabet size, cause the same numbers
+            # would be obtained for B..., C..., etc.
+            fixed_prefix_length = 1
             while tasks_count < options.cpu_count:
                 tasks_count *= alphabet_size
                 fixed_prefix_length += 1
 
             for length in options.lengths:
-                if options.cpu_count < alphabet_size ** length and length > 5:
+                if options.cpu_count < alphabet_size ** length and length > 9:
                     tasks = [
                         (alphabet_size, length, options.algo,
                          options.binary, i, fixed_prefix_length) for i in xrange(tasks_count)
@@ -64,5 +67,9 @@ if __name__ == '__main__':
                     tasks = [(alphabet_size, length, options.algo, options.binary, 0, 0)]
 
                 for size, length, result, spent_time in pool.imap_unordered(worker, tasks):
+
+                    # because we have calculated the answer for A... words
+                    result *= alphabet_size
+
                     writer.writerow((size, length, result, '{:.2f}'.format(spent_time)))
                     out_file.flush()
