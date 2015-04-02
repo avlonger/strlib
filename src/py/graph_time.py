@@ -23,15 +23,24 @@ def save_me(name, font):
 
 if __name__ == '__main__':
 
-    font = fm.FontProperties(fname='/Users/alonger/HSE/cmunrm.ttf', size=20)
+    font = fm.FontProperties(fname='/Users/alonger/HSE/cmunrm.ttf', size=14)
 
-    with open('time.txt') as fd:
-        lines = fd.read().strip().splitlines()
-        super_naive = [(l.split()[1], float(l.split()[2]) * 100000) for l in lines if l.startswith('MAXBORDERLESS_SUPER_NAIVE') and int(l.split()[1]) < 101]
-        border = [(l.split()[1], float(l.split()[2]) * 100000) for l in lines if l.startswith('MAXBORDERLESS_BORDER_FAST') and int(l.split()[1]) < 101]
+    for a in [2, 3, 4, 5, 10]:
+        with open('comparison{}.txt'.format(a)) as fd:
+            lines = fd.read().strip().splitlines()
+            super_naive = [(l.split()[1], float(l.split()[2]) * 1000) for l in lines if 'BASIC' in l]
+            border = [(l.split()[1], float(l.split()[2]) * 1000) for l in lines if 'PROPOSED' in l]
+            dbf = [(l.split()[1], float(l.split()[2]) * 1000) for l in lines if 'DBF_ALGORITHM' in l]
+            dbf_hash = [(l.split()[1], float(l.split()[2]) * 1000) for l in lines if 'HASH' in l]
 
-    pl.plot(*zip(*border), color='k', dashes=[5, 3])
-    pl.plot(*zip(*super_naive), color='k')
+        pl.plot(*zip(*border), label='Proposed algorithm')
+        pl.plot(*zip(*super_naive), label='Basic algorithm')
+        pl.plot(*zip(*dbf), label='DBF')
+        pl.plot(*zip(*dbf_hash), label='DBF + HashTable')
 
-    pl.ylabel('Time, $10^{-5}$s', fontproperties=font)
-    save_me('time.pdf', font)
+        pl.ylabel('Time, $10^{-3}$s', fontproperties=font)
+        pl.title('Average running time of the proposed algorithm, the basic algorithm\n'
+                 'and the algorithms based on Dictionary of Basic Factors,\n'
+                 'for the alphabet of size $\sigma = {}$\n'.format(a), fontproperties=font)
+        pl.legend(loc=2, prop=font)
+        save_me('comparison{}.png'.format(a), font)
