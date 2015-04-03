@@ -9,7 +9,7 @@
 ![](https://github.com/avlonger/strlib/blob/master/src/py/test/Alphabet_size_3_4_5.png)
 
 
-##### The average difference between the length of a string and the length of its maximal unbordered prefix length
+##### The average difference between the length of a string and the length of its maximal unbordered prefix
 
      | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17
  --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --:
