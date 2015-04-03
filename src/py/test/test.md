@@ -1,5 +1,15 @@
+#### Calculation results for the average difference between the length *n* of a string and the length of its maximal unbordered prefix
 
-##### The average difference between the length of a string and the length of its maximal unbordered prefix length
+###### For the alphabet of size *σ* = 2:
+ 
+![](https://github.com/avlonger/strlib/blob/master/src/py/test/Alphabet_size_2.png)
+
+###### For the alphabets of sizes *σ* = {3, 4, 5}:
+
+![](https://github.com/avlonger/strlib/blob/master/src/py/test/Alphabet_size_3_4_5.png)
+
+
+##### The average difference between the length of a string and the length of its maximal unbordered prefix
 
      | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17
  --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --:
@@ -17,4 +27,5 @@
 3 | 1.667 | 2.556 | 3.370 | 4.284 | 5.156 | 6.095 | 7.027 | 7.990 | 8.955 | 9.936 | 10.919 | 11.909 | 12.901 | 13.896 | 14.892 | 15.890
 4 | 1.750 | 2.688 | 3.578 | 4.539 | 5.485 | 6.466 | 7.445 | 8.437 | 9.430 | 10.427 | 11.425 | 12.424 | 13.423 | 14.422 | 15.422 | 16.422
 5 | 1.800 | 2.760 | 3.688 | 4.667 | 5.640 | 6.632 | 7.624 | 8.622 | 9.619 | 10.619 | 11.618 | 12.618 | 13.618 | 14.618 | 15.618 | 16.618
+
 
