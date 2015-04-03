@@ -69,9 +69,9 @@ if __name__ == '__main__':
             pl.axes().set_xlim(min(keys), max(keys))
             pl.grid()
 
-            pl.title('Average difference between the length $n$ of a string and the length\n'
-                     'of its maximal {} for alphabet of size $\sigma = {}$\n'.format(verbose_name, alphabet),
-                     fontproperties=font14)
+            # pl.title('Average difference between the length $n$ of a string and the length\n'
+            #          'of its maximal {} for alphabet of size $\sigma = {}$\n'.format(verbose_name, alphabet),
+            #          fontproperties=font14)
             save_me('results/{}/Alphabet_size_{}.png'.format(dir_name, alphabet), font14)
 
         for alphabets in [range(2, 6), range(3, 6)]:
@@ -91,9 +91,9 @@ if __name__ == '__main__':
             pl.legend(loc=2, prop=font14)
             pl.grid()
 
-            pl.title('Average difference between the length $n$ of a string and the length\n'
-                     'of its maximal {} for alphabets of size $\sigma = \{{{}\}}$\n'.format(
-                         verbose_name, ','.join(map(str, alphabets))), fontproperties=font14)
+            # pl.title('Average difference between the length $n$ of a string and the length\n'
+            #          'of its maximal {} for alphabets of size $\sigma = \{{{}\}}$\n'.format(
+            #              verbose_name, ','.join(map(str, alphabets))), fontproperties=font14)
             save_me('results/{}/Alphabet_size_{}.png'.format(dir_name, '_'.join(map(str, alphabets))), font14)
 
     for alphabet in xrange(2, 6):
@@ -139,9 +139,9 @@ if __name__ == '__main__':
         pl.legend(loc=2, prop=font14)
         pl.grid()
         pl.axes().set_xlim(min(keys), max(keys))
-        pl.title('Difference between the length $n$ of a string and the average length of its maximal\n'
-                 'unbordered factor $b(n)$ and maximal unbordered prefix $p(n)$ '
-                 'for alphabet of size $\sigma={}$'.format(alphabet), fontproperties=font14)
+        # pl.title('Difference between the length $n$ of a string and the average length of its maximal\n'
+        #          'unbordered factor $b(n)$ and maximal unbordered prefix $p(n)$ '
+        #          'for alphabet of size $\sigma={}$'.format(alphabet), fontproperties=font14)
         save_me('results/{}/Alphabet_size_{}.png'.format(dir_name, alphabet), font14)
 
         pl.axes().clear()
