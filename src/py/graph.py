@@ -28,7 +28,7 @@ dashes = [
     [1, 1],
 ]
 
-MAX_COMPOSITE_LENGTH = 17
+MAX_COMPOSITE_LENGTH = 19
 
 Entity = namedtuple('Entity', ['name', 'readable_name', 'symbol'])
 
