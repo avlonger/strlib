@@ -85,7 +85,7 @@ if __name__ == '__main__':
                 values = [counts[alphabet][x] for x in keys]
                 pl.plot(keys, values, label='$\sigma = {}$'.format(alphabet), color='k', dashes=dashes[i])
             pl.axes().set_xlim(min(keys), max(keys))
-            pl.legend(loc=2, prop=font19)
+            pl.legend(loc=4, prop=font19)
             save_me('for_paper/{}/Alphabet_size_{}.pdf'.format(dir_name, '_'.join(map(str, alphabets))), font19)
 
             for i, alphabet in enumerate(alphabets):
@@ -93,7 +93,7 @@ if __name__ == '__main__':
                 values = [counts[alphabet][x] for x in keys]
                 pl.plot(keys, values, label='$\sigma = {}$'.format(alphabet))
             pl.axes().set_xlim(min(keys), max(keys))
-            pl.legend(loc=2, prop=font14)
+            pl.legend(loc=4, prop=font14)
             pl.grid()
 
             # pl.title('Average difference between the length $n$ of a string and the length\n'
@@ -129,7 +129,7 @@ if __name__ == '__main__':
             values = [counts[alphabet][x] for x in keys]
             pl.plot(keys, values, color='k', dashes=dashes[i], label='$n - {}$'.format(symbol))
 
-        pl.legend(loc=2, prop=font14)
+        pl.legend(loc=4, prop=font14)
         pl.axes().set_xlim(2, 100)
         save_me('for_paper/{}/Alphabet_size_{}.pdf'.format(dir_name, alphabet), font19)
 
@@ -151,7 +151,7 @@ if __name__ == '__main__':
             values = [counts[alphabet][x] for x in keys]
             pl.plot(keys, values, label='$n - {}$'.format(symbol))
 
-        pl.legend(loc=2, prop=font14)
+        pl.legend(loc=4, prop=font14)
         pl.grid()
         pl.axes().set_xlim(2, 100)
         # pl.title('Difference between the length $n$ of a string and the average length of its maximal\n'
