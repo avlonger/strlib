@@ -15,7 +15,8 @@ def worker(args):
     alphabet, length, step, diff, seed, algo, binary = args
     start = time.time()
     p = subprocess.Popen([
-        binary, '-a', str(alphabet), '-b', str(length), '-f', str(length + 1), '-s', str(step), '-d', str(diff), algo
+        binary, '-a', str(alphabet), '-b', str(length), '-f', str(length + 1), '-s', str(step), '-d', str(diff), algo,
+        '-r', str(seed)
     ], stdout=subprocess.PIPE)
     p.wait()
     return p.stdout.read().strip().split() + [time.time() - start]
