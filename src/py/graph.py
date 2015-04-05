@@ -28,7 +28,7 @@ dashes = [
     [1, 1],
 ]
 
-MAX_COMPOSITE_LENGTH = 19
+MAX_COMPOSITE_LENGTH = 100
 
 Entity = namedtuple('Entity', ['name', 'readable_name', 'symbol'])
 
@@ -48,14 +48,19 @@ if __name__ == '__main__':
 
         with open('max_{}.txt'.format(name)) as fd:
             for line in fd:
-                alphabet_size, length, val = map(int, line.strip().split())
-                counts[alphabet_size][length] = val
+                alphabet, length, val = map(int, line.strip().split())
+                counts[alphabet][length] = length - val / alphabet ** length
+
+        with open('max_{}_estimation.txt'.format(name)) as fd:
+            for line in fd:
+                alphabet, length, _, _, val = line.strip().split()[:5]
+                counts[int(alphabet)][int(length)] = int(length) - float(val)
 
         dir_name = 'Average difference/Between n and maximal {}'.format(verbose_name)
 
         for alphabet in xrange(2, 6):
             keys = sorted(counts[alphabet])
-            values = [x - counts[alphabet][x] / alphabet ** x for x in keys]
+            values = [counts[alphabet][x] for x in keys]
             pl.plot(keys, values, color='k')
             pl.axes().set_xlim(min(keys), max(keys))
             try:
@@ -77,7 +82,7 @@ if __name__ == '__main__':
         for alphabets in [range(2, 6), range(3, 6)]:
             for i, alphabet in enumerate(alphabets):
                 keys = sorted(counts[alphabet])[:MAX_COMPOSITE_LENGTH]
-                values = [x - counts[alphabet][x] / alphabet ** x for x in keys]
+                values = [counts[alphabet][x] for x in keys]
                 pl.plot(keys, values, label='$\sigma = {}$'.format(alphabet), color='k', dashes=dashes[i])
             pl.axes().set_xlim(min(keys), max(keys))
             pl.legend(loc=2, prop=font19)
@@ -85,7 +90,7 @@ if __name__ == '__main__':
 
             for i, alphabet in enumerate(alphabets):
                 keys = sorted(counts[alphabet])[:MAX_COMPOSITE_LENGTH]
-                values = [x - counts[alphabet][x] / alphabet ** x for x in keys]
+                values = [counts[alphabet][x] for x in keys]
                 pl.plot(keys, values, label='$\sigma = {}$'.format(alphabet))
             pl.axes().set_xlim(min(keys), max(keys))
             pl.legend(loc=2, prop=font14)
@@ -113,14 +118,19 @@ if __name__ == '__main__':
             with open('max_{}.txt'.format(name)) as fd:
                 for line in fd:
                     alphabet_size, length, val = map(int, line.strip().split())
-                    counts[alphabet_size][length] = val
+                    counts[alphabet_size][length] = length - val / alphabet_size ** length
+
+            with open('max_{}_estimation.txt'.format(name)) as fd:
+                for line in fd:
+                    alphabet_size, length, _, _, val = line.strip().split()[:5]
+                    counts[int(alphabet_size)][int(length)] = int(length) - float(val)
 
             keys = sorted(counts[alphabet])
-            values = [x - counts[alphabet][x] / alphabet ** x for x in keys]
+            values = [counts[alphabet][x] for x in keys]
             pl.plot(keys, values, color='k', dashes=dashes[i], label='$n - {}$'.format(symbol))
 
         pl.legend(loc=2, prop=font14)
-        pl.axes().set_xlim(min(keys), max(keys))
+        pl.axes().set_xlim(2, 100)
         save_me('for_paper/{}/Alphabet_size_{}.pdf'.format(dir_name, alphabet), font19)
 
         for i, (name, verbose_name, symbol) in enumerate(entities):
@@ -130,15 +140,20 @@ if __name__ == '__main__':
             with open('max_{}.txt'.format(name)) as fd:
                 for line in fd:
                     alphabet_size, length, val = map(int, line.strip().split())
-                    counts[alphabet_size][length] = val
+                    counts[alphabet_size][length] = length - val / alphabet_size ** length
+
+            with open('max_{}_estimation.txt'.format(name)) as fd:
+                for line in fd:
+                    alphabet_size, length, _, _, val = line.strip().split()[:5]
+                    counts[int(alphabet_size)][int(length)] = int(length) - float(val)
 
             keys = sorted(counts[alphabet])
-            values = [x - counts[alphabet][x] / alphabet ** x for x in keys]
+            values = [counts[alphabet][x] for x in keys]
             pl.plot(keys, values, label='$n - {}$'.format(symbol))
 
         pl.legend(loc=2, prop=font14)
         pl.grid()
-        pl.axes().set_xlim(min(keys), max(keys))
+        pl.axes().set_xlim(2, 100)
         # pl.title('Difference between the length $n$ of a string and the average length of its maximal\n'
         #          'unbordered factor $b(n)$ and maximal unbordered prefix $p(n)$ '
         #          'for alphabet of size $\sigma={}$'.format(alphabet), fontproperties=font14)
