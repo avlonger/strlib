@@ -103,6 +103,11 @@ if __name__ == '__main__':
 
     for alphabet in xrange(2, 6):
 
+        if alphabet == 2:
+            loc = 2
+        else:
+            loc = 4
+
         dir_name = 'Average difference/Between n and maximal unbordered factor and prefix'
 
         try:
@@ -129,7 +134,7 @@ if __name__ == '__main__':
             values = [counts[alphabet][x] for x in keys]
             pl.plot(keys, values, color='k', dashes=dashes[i], label='$n - {}$'.format(symbol))
 
-        pl.legend(loc=4, prop=font14)
+        pl.legend(loc=loc, prop=font14)
         pl.axes().set_xlim(2, 100)
         save_me('for_paper/{}/Alphabet_size_{}.pdf'.format(dir_name, alphabet), font19)
 
@@ -151,7 +156,7 @@ if __name__ == '__main__':
             values = [counts[alphabet][x] for x in keys]
             pl.plot(keys, values, label='$n - {}$'.format(symbol))
 
-        pl.legend(loc=4, prop=font14)
+        pl.legend(loc=loc, prop=font14)
         pl.grid()
         pl.axes().set_xlim(2, 100)
         pl.title('Difference between the length $n$ of a string and the average length of its maximal\n'
