@@ -152,8 +152,8 @@ if __name__ == '__main__':
                     alphabet_size, length, _, _, val = line.strip().split()[:5]
                     counts[int(alphabet_size)][int(length)] = int(length) - float(val)
 
-            keys = sorted(counts[alphabet])
-            values = [counts[alphabet][x] for x in keys]
+            keys = sorted(counts[alphabet])[:100]
+            values = [counts[alphabet][x] for x in keys][:100]
             pl.plot(keys, values, label='$n - {}$'.format(symbol))
 
         pl.legend(loc=loc, prop=font14)
