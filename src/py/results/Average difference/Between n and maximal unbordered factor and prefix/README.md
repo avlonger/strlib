@@ -4,9 +4,11 @@
 
 <div style="text-align: center;">
     <img src ="https://github.com/avlonger/strlib/blob/master/src/py/results/Average%20difference/Between%20n%20and%20maximal%20unbordered%20factor%20and%20prefix/Alphabet_size_2.png" />
-    Fig. 1: Difference between the length n of a string and the average length of its maximal unbordered factor β(n) and the average length of its maximal unbordered prefix π(n) for 1 ≤ n ≤ 100 and alphabet of size σ = 2
 </div>
 
+<p style="text-align: center;">
+Fig. 1: Difference between the length n of a string and the average length of its maximal unbordered factor β(n) and the average length of its maximal unbordered prefix π(n) for 1 ≤ n ≤ 100 and alphabet of size σ = 2
+</p>
 
 
 
