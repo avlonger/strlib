@@ -1,21 +1,23 @@
-#### Calculation results for the average difference between the length *n* of a string and the length of its maximal unbordered prefix
+#### Difference between the length n of a string and the average length of its maximal unbordered factor β(n) and the average length of its maximal unbordered prefix π(n) for 1 ≤ n ≤ 100 and alphabet of size σ = 2
 
-###### For the alphabet of size *σ* = 2:
+###### For the alphabet of size σ = 2:
 
-<div style="text-align: center;">
-    <img src ="https://github.com/avlonger/strlib/blob/master/src/py/results/Average%20difference/Between%20n%20and%20maximal%20unbordered%20factor%20and%20prefix/Alphabet_size_2.png" />
-</div>
-
-<p style="text-align: center;">
-Fig. 1: Difference between the length n of a string and the average length of its maximal unbordered factor β(n) and the average length of its maximal unbordered prefix π(n) for 1 ≤ n ≤ 100 and alphabet of size σ = 2
-</p>
+![](https://github.com/avlonger/strlib/blob/master/src/py/results/Average%20difference/Between%20n%20and%20maximal%20unbordered%20factor%20and%20prefix/Alphabet_size_2.png)
 
 
+###### For the alphabet of size σ = 3:
 
-###### For the alphabets of sizes *σ* = {3, 4, 5}:
+![](https://github.com/avlonger/strlib/blob/master/src/py/results/Average%20difference/Between%20n%20and%20maximal%20unbordered%20factor%20and%20prefix/Alphabet_size_3.png)
 
-![](https://github.com/avlonger/strlib/blob/master/src/py/test/Alphabet_size_3_4_5.png)
 
+###### For the alphabet of size σ = 4:
+
+![](https://github.com/avlonger/strlib/blob/master/src/py/results/Average%20difference/Between%20n%20and%20maximal%20unbordered%20factor%20and%20prefix/Alphabet_size_4.png)
+
+
+###### For the alphabet of size σ = 5:
+
+![](https://github.com/avlonger/strlib/blob/master/src/py/results/Average%20difference/Between%20n%20and%20maximal%20unbordered%20factor%20and%20prefix/Alphabet_size_4.png)
 
 ##### The average difference between the length of a string and the length of its maximal unbordered prefix
 
