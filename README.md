@@ -1,6 +1,4 @@
-# strlib
-
-Some algorithms for words decomposition
+Implementation of some basic algorithms on strings
 
 # Compilation
 
@@ -8,8 +6,14 @@ Some algorithms for words decomposition
 $ make
 ```
 
-# Usage
+# KMP
+```
+$ ./bin/kmp aba abaabacaba
+OCCURENCES: 3
+0 3 7
+```
 
+# Duval alogrithm
 ```
 $ ./bin/duval -h mississippi
 FACTOR COUNT: 5
