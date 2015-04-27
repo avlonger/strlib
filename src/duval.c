@@ -3,34 +3,104 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include "algo/duval.h"
+
+/**
+* This is an implementation of the Duval algorithm
+*/
+int duval(const char * text, int * output){
+    size_t n = strlen(text);
+    int h = 0;
+    int words_count = 0;
+    while (h < n) {
+        int i = h;
+        int j = h + 1;
+        while (text[j] >= text[i]) {
+            if (text[j] > text[i])
+                i = h;
+            else
+                i++;
+            j++;
+        }
+        while (h <= i) {
+            output[words_count++] = h;
+            h += j - i;
+        }
+    }
+    return words_count;
+}
+
+/**
+* Build Lyndon decomposition naively
+*/
+int naive_lyndon_decomposition(const char * text, int * output) {
+    size_t n = strlen(text);
+
+    if (n == 1) {
+        output[0] = 0;
+        return 1;
+    }
+
+    int * next_word = calloc(n, sizeof(int));
+
+    // build first (not Lyndon) decomposition of size n
+    for (int i = 0; i < n; ++i) {
+        next_word[i] = i + 1;
+    }
+
+    // concatenate consequent factors if first is less than the second
+    bool progress = true;
+    while (progress) {
+        progress = false;
+        int first_word_start = 0;
+        int second_word_start = next_word[first_word_start];
+        while (second_word_start < n) {
+            int third_word_start = next_word[second_word_start];
+
+            int first_word_index = first_word_start;
+            int second_word_index = second_word_start;
+            while (first_word_index < second_word_start && second_word_index < third_word_start && text[first_word_index] == text[second_word_index]) {
+                first_word_index++;
+                second_word_index++;
+            }
+
+            if (second_word_index < third_word_start && (first_word_index == second_word_start || text[first_word_index] < text[second_word_index])) {
+                progress = true;
+                next_word[first_word_start] = third_word_start;
+            }
+
+            first_word_start = next_word[first_word_start];
+            second_word_start = (first_word_start < n) ? next_word[first_word_start] : (int)n;
+        }
+    }
+    int word_count = 0;
+    int word_start = 0;
+    while (word_start < n) {
+        output[word_count++] = word_start;
+        word_start = next_word[word_start];
+    }
+
+    free(next_word);
+    return word_count;
+}
+
 
 void usage(const char * program_name) {
-    printf("Usage: %s [-h] [-f FILENAME | TEXT]\n", program_name);
+    printf("Usage: %s [-h] TEXT\n", program_name);
     printf("Build Lyndon decomposition for text\n");
     printf("The output contains starting positions of decomposition factors\n\n");
     printf(" -h  Print decomposition in readable format\n");
-    printf(" -f  Filename (not supported yet)\n");
 }
 
 
 int main(int argc, char** argv) {
     int c;
-    char * filename = NULL;
     bool human_friendly = false;
-    bool fasta = false;
     opterr = 1;
-    while ((c = getopt (argc, argv, "dhf:")) != -1)
+    while ((c = getopt (argc, argv, "h")) != -1)
         switch (c)
         {
-            case 'f':
-                filename = argv[optind];
-                break;
             case 'h':
                 human_friendly = true;
-                break;
-            case 'd':
-                fasta = true;
                 break;
             case '?':
             case ':':
