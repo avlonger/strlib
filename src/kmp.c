@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include <stdio.h>
-
 
 /**
 * Build border array for text
@@ -45,11 +45,65 @@ int kmp(const char * pattern, const char * text, int * output){
 }
 
 
+/**
+ * Test KMP implementation on random data
+ */
+void test_kmp() {
+    int tests = 1000;
+    int text_length = 100000;
+    int pattern_length = 10;
+    int alphabet_size = 2;
+    char * text = calloc(text_length + 1, sizeof(char));
+    char * pattern = calloc(pattern_length + 1, sizeof(char));
+    int * output = calloc(text_length + 1, sizeof(int));
+    for (int i = 0; i < tests; ++i) {
+        printf("Test %d...\n", i + 1);
+
+        // fill text with random letters
+        for (int c = 0; c < text_length; ++c) {
+            text[c] = (char) (rand() % alphabet_size + 1);
+        }
+        text[text_length] = 0;
+
+        // fill pattern with random letters
+        for (int c = 0; c < pattern_length; ++c) {
+            pattern[c] = (char) (rand() % alphabet_size + 1);
+        }
+        pattern[pattern_length] = 0;
+
+        // test kmp output
+        int occ_count = kmp(pattern, text, output);
+        int occ_number = 0;
+        unsigned long position = 0;
+        char * strstr_result = strstr(text, pattern);
+        while (strstr_result != NULL) {
+            assert(occ_number < occ_count);
+            position = strstr_result - text;
+            assert(position == output[occ_number++]);
+            strstr_result = strstr(strstr_result + 1, pattern);
+        }
+        assert(occ_number == occ_count);
+        printf("OK (occ: %d)\n", occ_count);
+    }
+    printf("----------\n");
+    printf("Tests passed: %d\n", tests);
+    free(pattern);
+    free(text);
+    free(output);
+}
+
+
 int main(int argc, char** argv) {
+    if (argc == 2 && strcmp(argv[1], "-t") == 0) {
+        test_kmp();
+        return 0;
+    }
+
     if (argc < 3) {
         printf("Usage: %s PATTERN TEXT\n", argv[0]);
         return 1;
     }
+
     char * pattern = argv[1];
     char * text = argv[2];
 
