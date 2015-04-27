@@ -104,7 +104,7 @@ void test_duval() {
         }
         text[text_length] = 0;
 
-        // test Duval algorithm duval_output
+        // test Duval algorithm output
         int duval_factor_count = duval(text, duval_output);
         int naive_factor_count = naive_lyndon_decomposition(text, naive_output);
         assert(duval_factor_count == naive_factor_count);
