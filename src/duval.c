@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
 #include <stdbool.h>
 #include <unistd.h>
 
@@ -84,23 +85,64 @@ int naive_lyndon_decomposition(const char * text, int * output) {
 }
 
 
+/**
+ * Test Duval algorithm implementation on random data
+ */
+void test_duval() {
+    int tests = 1000;
+    int text_length = 100000;
+    int alphabet_size = 2;
+    char * text = calloc(text_length + 1, sizeof(char));
+    int * duval_output = calloc(text_length + 1, sizeof(int));
+    int * naive_output = calloc(text_length + 1, sizeof(int));
+    for (int i = 0; i < tests; ++i) {
+        printf("Test %d...\n", i + 1);
+
+        // fill text with random letters
+        for (int c = 0; c < text_length; ++c) {
+            text[c] = (char) (rand() % alphabet_size + 1);
+        }
+        text[text_length] = 0;
+
+        // test Duval algorithm duval_output
+        int duval_factor_count = duval(text, duval_output);
+        int naive_factor_count = naive_lyndon_decomposition(text, naive_output);
+        assert(duval_factor_count == naive_factor_count);
+        for (int factor_number = 0; factor_number < duval_factor_count; ++factor_number) {
+            assert(duval_output[factor_number] == naive_output[factor_number]);
+        }
+        printf("OK (factors: %d)\n", duval_factor_count);
+    }
+    printf("----------\n");
+    printf("Tests passed: %d\n", tests);
+    free(text);
+    free(duval_output);
+}
+
+
+
 void usage(const char * program_name) {
     printf("Usage: %s [-h] TEXT\n", program_name);
     printf("Build Lyndon decomposition for text\n");
     printf("The output contains starting positions of decomposition factors\n\n");
     printf(" -h  Print decomposition in readable format\n");
+    printf(" -t  Test Duval algorithm implementation instead of TEXT processing\n");
 }
 
 
 int main(int argc, char** argv) {
     int c;
     bool human_friendly = false;
+    bool test = false;
     opterr = 1;
-    while ((c = getopt (argc, argv, "h")) != -1)
+    while ((c = getopt (argc, argv, "ht")) != -1)
         switch (c)
         {
             case 'h':
                 human_friendly = true;
+                break;
+            case 't':
+                test = true;
                 break;
             case '?':
             case ':':
@@ -109,6 +151,10 @@ int main(int argc, char** argv) {
                 usage(argv[0]);
                 return -1;
         }
+    if (test) {
+        test_duval();
+        return 0;
+    }
     if (optind >= argc) {
         usage(argv[0]);
         return -1;
